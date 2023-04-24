@@ -6,6 +6,7 @@ import math
 from os import getcwd
 import numpy as np  
 from geometry_msgs.msg import Twist
+from formicarium_interfaces.action import Spawn
 
 def distance(x_0, y_0, x_1, y_1):
         return math.sqrt((x_1 - x_0)**2 + (y_1 - y_0)**2)
@@ -49,7 +50,6 @@ class LIDAR(object):
             if (i != 99):
                 pygame.draw.line(env.map, env.red, (x_0, y_0), (x_t, y_t))
         return data
-
 
 class Environment:
     def __init__(self, dimentions, robots):
@@ -136,7 +136,12 @@ class SimFormicarium(Node):
                         robot.process_cmd_vel,
                         1
                     ))        
-                
+        
+        self.spawn_action = ActionServer(
+            self,
+
+        )
+
         pygame.init()
         start = (200, 200)
         dims = (800, 1200)
@@ -150,7 +155,7 @@ class SimFormicarium(Node):
         self.dt = 0
         self.lasttime = pygame.time.get_ticks()
             
-
+    
 
     def run(self):
         pygame.event.get()
