@@ -5,6 +5,21 @@ datatype(Position) {
   float height
 }
 
+!define datatype(x) class x << (D,#FF7700) DataType>>
+datatype(RobotConfig) {
+    float wheelRadius
+    float wheelBase
+    Position startPose
+    Publisher odom_pub
+}
+
+!define datatype(x) class x << (D,#FF7700) DataType>>
+datatype(LidarConfig) {
+    float range
+    Position position
+    Publisher scan_pub
+}
+
 class SimManager{
     SimManager(IRobot& robot, IEnvironment& env);
 }
@@ -16,7 +31,7 @@ interface IRobot{
 }
 
 class DiffRobot {
-    DiffRobot(Position startPose, String imgPath, float wheelRadius, float wheelBase);
+    DiffRobot(RobotConfig config, ILidar& lidar);
 }
 
 interface ILidar{
@@ -25,7 +40,7 @@ interface ILidar{
 }
 
 class Lidar {
-    Lidar(float range, Position position);
+    Lidar(LidarConfig config);
 }
 
 interface IEnvironment{
