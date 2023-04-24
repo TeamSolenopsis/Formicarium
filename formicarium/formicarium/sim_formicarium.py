@@ -2,6 +2,7 @@ import rclpy
 from rclpy.node import Node
 import pygame
 import math
+from os import getcwd
 import numpy as np  
 
 def distance(x_0, y_0, x_1, y_1):
@@ -76,7 +77,7 @@ class Robot:
         self.theta = 0
         self.vel = 0.01 * self.m2p
         self.ver = 0.01 * self.m2p
-        self.img = pygame.image.load(robotImg)
+        self.img = pygame.image.load(f'{getcwd()}/src/Formicarium/formicarium/{robotImg}')
         self.rotated = self.img
         self.rect = self.rotated.get_rect(center = (self.x, self.y))
         self.lidar = LIDAR(environment, position=(self.x, self.y))
