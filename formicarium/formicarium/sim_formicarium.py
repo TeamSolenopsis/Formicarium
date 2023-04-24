@@ -4,6 +4,7 @@ import pygame
 import math
 from os import getcwd
 import numpy as np  
+from geometry_msgs.msg import Twist
 
 def distance(x_0, y_0, x_1, y_1):
         return math.sqrt((x_1 - x_0)**2 + (y_1 - y_0)**2)
@@ -46,7 +47,6 @@ class LIDAR(object):
                 
             if (i != 99):
                 pygame.draw.line(env.map, env.red, (x_0, y_0), (x_t, y_t))
-                    
         return data
 
 
@@ -58,15 +58,14 @@ class Environment:
         self.blue = (0,0,255)
         self.red = (255,0,0)
         self.yellow = (255,255,0)
+        self.brown = (234,182,118)
 
         self.height = dimentions[0]
         self.width = dimentions[1]
 
         pygame.display.set_caption("env")
         self.map = pygame.display.set_mode((self.width, self.height))
-        self.robots = [Robot([200,200], 'robot.png', 0.01*3779.52, self), Robot([300,300], 'robot.png', 0.01*3779.52, self)]
-
-
+        self.robots = [Robot([200,200], 'ant.png', 0.01*3779.52, self), Robot([300,300], 'ant.png', 0.01*3779.52, self)]
 
 class Robot:
     def __init__(self, startpose, robotImg, width, environment):
@@ -78,6 +77,8 @@ class Robot:
         self.vel = 0.01 * self.m2p
         self.ver = 0.01 * self.m2p
         self.img = pygame.image.load(f'{getcwd()}/src/Formicarium/formicarium/{robotImg}')
+        self.img = pygame.transform.scale(self.img, (80,81))
+        self.img = pygame.transform.rotate(self.img, -90)
         self.rotated = self.img
         self.rect = self.rotated.get_rect(center = (self.x, self.y))
         self.lidar = LIDAR(environment, position=(self.x, self.y))
@@ -104,28 +105,51 @@ class SimFormicarium(Node):
         super().__init__('sim_formicarium')
         self.get_logger().info('Hello World: sim_formicarium')
 
+        self.subscriber = self.create_subscription(
+            Twist,
+            'cmd_vel',
+            self.process_cmd_vel,
+            1
+        )
+
+        self.subscriber
+        self.vel_l = 0
+        self.vel_r = 0
+
         pygame.init()
         start = (200, 200)
         dims = (800, 1200)
         running = True
         self.env = Environment(dims)
 
-        self.timer = self.create_timer(1/100, self.run)
+        self.timer = self.create_timer(1/60, self.run)
 
         # robot = Robot(start, 'robot.png', 0.01*3779.52)
 
         self.dt = 0
         self.lasttime = pygame.time.get_ticks()
             
+    def process_cmd_vel(self, msg:Twist):
+        #TODO: Translate cmd_vel to diff drive
+        v = msg.linear.x
+        w = msg.angular.z
+        L = 0.0025 * 100
+        r = 0.10 * 100
+        self.vel_l = (v - w * (L / 2)) / r
+        self.vel_r = (v + w * (L / 2)) / r
 
     def run(self):
+        pygame.event.get()
         for robot in self.env.robots:
-            robot.move(0.05, 0.04, self.dt)
+            robot.move(self.vel_l, self.vel_r, self.dt)
         self.dt = (pygame.time.get_ticks() - self.lasttime) / 1000
         self.lasttime = pygame.time.get_ticks()
         pygame.display.update()
-        self.env.map.fill(self.env.black)
-        pygame.draw.rect(self.env.map, self.env.blue, pygame.Rect(0, 0, 800, 1200), width=20)
+        self.env.map.fill(self.env.brown)
+        #self.background = pygame.image.load(f'{getcwd()}/src/Formicarium/formicarium/dirt.png')
+        #self.background = pygame.transform.scale(self.background, (1200,1200))
+        #self.env.map.blit(self.background,self.background.get_rect())
+        pygame.draw.rect(self.env.map, self.env.blue, pygame.Rect(0, 0, 1200, 1200), width=20)
         # robot.draw(env.map)
         for robot in self.env.robots:
             robot.draw(self.env)
