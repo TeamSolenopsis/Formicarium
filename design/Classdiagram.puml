@@ -1,0 +1,48 @@
+@startuml
+!define datatype(x) class x << (D,#FF7700) DataType>>
+datatype(Position) {
+  float width
+  float height
+}
+
+class SimManager{
+    SimManager(IRobot& robot, IEnvironment& env);
+}
+
+interface IRobot{
+    void Draw(Surface& map);
+    void Move(float leftVelocity, float rightVelocity, float deltaTime);
+    void PublishOdom(Publisher& publisher);
+}
+
+class DiffRobot {
+    DiffRobot(Position startPose, String imgPath, float wheelRadius, float wheelBase);
+}
+
+interface ILidar{
+    void Scan(Surface& env, Publisher& publisher);
+    void SetPosition(Position position);
+}
+
+class Lidar {
+    Lidar(float range, Position position);
+}
+
+interface IEnvironment{
+    const Sufrface& GetMap();
+}
+
+class Environment {
+    Environment(float width, float height);
+}
+
+SimManager o-- IRobot
+SimManager o-- IEnvironment
+IEnvironment <|.. Environment
+IRobot <|.. DiffRobot
+DiffRobot o-- ILidar
+ILidar <|.. Lidar
+
+
+
+@enduml
