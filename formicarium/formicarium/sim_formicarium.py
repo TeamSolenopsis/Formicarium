@@ -1,5 +1,6 @@
 import rclpy
-from rclpy.node import Node
+from rclpy.node import Node, Subscription
+from rclpy.action import ActionServer
 import pygame
 import math
 from os import getcwd
@@ -51,7 +52,7 @@ class LIDAR(object):
 
 
 class Environment:
-    def __init__(self, dimentions):
+    def __init__(self, dimentions, robots):
         self.black = (0,0,0)
         self.white = (255,255,255)
         self.green = (0,255,0)
@@ -65,10 +66,11 @@ class Environment:
 
         pygame.display.set_caption("env")
         self.map = pygame.display.set_mode((self.width, self.height))
-        self.robots = [Robot([200,200], 'ant.png', 0.01*3779.52, self), Robot([300,300], 'ant.png', 0.01*3779.52, self)]
+        self.robots = robots
 
 class Robot:
-    def __init__(self, startpose, robotImg, width, environment):
+    def __init__(self, name, startpose, robotImg, width, environment):
+        self.name = name
         self.m2p = 3779.52
         self.width = width
         self.x = startpose[0]
@@ -82,53 +84,11 @@ class Robot:
         self.rotated = self.img
         self.rect = self.rotated.get_rect(center = (self.x, self.y))
         self.lidar = LIDAR(environment, position=(self.x, self.y))
-
-
-    def draw(self, map):
-        map.map.blit(self.rotated, self.rect)
-        self.lidar.scan(map)
-
-    def move(self, vel, ver, dt):
-        self.vel = vel * self.m2p
-        self.ver = ver * self.m2p
-
-        self.x += ((self.vel+self.ver)/2) * math.cos(self.theta) * dt
-        self.y -= ((self.vel+self.ver)/2) * math.sin(self.theta) * dt
-        self.theta += (self.ver - self.vel) / self.width * dt
-
-        self.rotated = pygame.transform.rotozoom(self.img, math.degrees(self.theta), 1)
-        self.rect = self.rotated.get_rect(center = (self.x, self.y))
-        self.lidar.setPosition(self.x, self.y)
-
-class SimFormicarium(Node):
-    def __init__(self):
-        super().__init__('sim_formicarium')
-        self.get_logger().info('Hello World: sim_formicarium')
-
-        self.subscriber = self.create_subscription(
-            Twist,
-            'cmd_vel',
-            self.process_cmd_vel,
-            1
-        )
-
-        self.subscriber
+        self.dt = 0
+        self.lasttime = 0
         self.vel_l = 0
         self.vel_r = 0
 
-        pygame.init()
-        start = (200, 200)
-        dims = (800, 1200)
-        running = True
-        self.env = Environment(dims)
-
-        self.timer = self.create_timer(1/60, self.run)
-
-        # robot = Robot(start, 'robot.png', 0.01*3779.52)
-
-        self.dt = 0
-        self.lasttime = pygame.time.get_ticks()
-            
     def process_cmd_vel(self, msg:Twist):
         #TODO: Translate cmd_vel to diff drive
         v = msg.linear.x
@@ -138,12 +98,66 @@ class SimFormicarium(Node):
         self.vel_l = (v - w * (L / 2)) / r
         self.vel_r = (v + w * (L / 2)) / r
 
+
+
+    def draw(self, map):
+        map.map.blit(self.rotated, self.rect)
+        self.lidar.scan(map)
+
+    def move(self):
+        self.dt = (pygame.time.get_ticks() - self.lasttime) / 1000
+        self.lasttime = pygame.time.get_ticks()
+        self.vel = self.vel_l * self.m2p
+        self.ver = self.vel_r * self.m2p
+
+        self.x += ((self.vel+self.ver)/2) * math.cos(self.theta) * self.dt
+        self.y -= ((self.vel+self.ver)/2) * math.sin(self.theta) * self.dt
+        self.theta += (self.ver - self.vel) / self.width * self.dt
+
+        self.rotated = pygame.transform.rotozoom(self.img, math.degrees(self.theta), 1)
+        self.rect = self.rotated.get_rect(center = (self.x, self.y))
+        self.lidar.setPosition(self.x, self.y)
+
+class SimFormicarium(Node):
+    def __init__(self):
+        super().__init__('sim_formicarium')
+        self.get_logger().info('Hello World: sim_formicarium')
+        self.vel_l = 0
+        self.vel_r = 0
+        self.robots = [Robot("robot1", [200,200], 'ant.png', 0.01*3779.52, self), Robot("robot2", [300,300], 'ant.png', 0.01*3779.52, self)]
+        self.subscribers = {}
+        for robot in self.robots:
+                self.subscribers[
+                    robot.name
+                ] = (robot, 
+                     self.create_subscription(
+                        Twist,
+                        f'{robot.name}/cmd_vel',
+                        robot.process_cmd_vel,
+                        1
+                    ))        
+                
+        pygame.init()
+        start = (200, 200)
+        dims = (800, 1200)
+        running = True
+        self.env = Environment(dims, self.robots)                              
+
+        self.timer = self.create_timer(1/60, self.run)
+
+        # robot = Robot(start, 'robot.png', 0.01*3779.52)
+
+        self.dt = 0
+        self.lasttime = pygame.time.get_ticks()
+            
+
+
     def run(self):
         pygame.event.get()
         for robot in self.env.robots:
-            robot.move(self.vel_l, self.vel_r, self.dt)
-        self.dt = (pygame.time.get_ticks() - self.lasttime) / 1000
-        self.lasttime = pygame.time.get_ticks()
+            robot.move()
+        # self.dt = (pygame.time.get_ticks() - self.lasttime) / 1000
+        # self.lasttime = pygame.time.get_ticks()
         pygame.display.update()
         self.env.map.fill(self.env.brown)
         #self.background = pygame.image.load(f'{getcwd()}/src/Formicarium/formicarium/dirt.png')
