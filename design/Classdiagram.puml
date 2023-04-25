@@ -1,8 +1,8 @@
 @startuml
 !define datatype(x) class x << (D,#FF7700) DataType>>
 datatype(Position) {
-  float width
-  float height
+  float x
+  float y
 }
 
 !define datatype(x) class x << (D,#FF7700) DataType>>
