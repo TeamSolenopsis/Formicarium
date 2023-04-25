@@ -1,12 +1,11 @@
 import rclpy
 from rclpy.node import Node, Subscription
-from rclpy.action import ActionServer
 import pygame
 import math
 from os import getcwd
 import numpy as np  
 from geometry_msgs.msg import Twist
-from formicarium_interfaces.action import Spawn
+from formicarium_interfaces.srv import Spawner
 
 def distance(x_0, y_0, x_1, y_1):
         return math.sqrt((x_1 - x_0)**2 + (y_1 - y_0)**2)
@@ -136,11 +135,7 @@ class SimFormicarium(Node):
                         robot.process_cmd_vel,
                         1
                     ))        
-        
-        self.spawn_action = ActionServer(
-            self,
-
-        )
+        self.srv = self.create_service(Spawner, 'spanwer', self.spawn)
 
         pygame.init()
         start = (200, 200)
@@ -155,7 +150,20 @@ class SimFormicarium(Node):
         self.dt = 0
         self.lasttime = pygame.time.get_ticks()
             
-    
+    def spawn(self, request, response):
+        self.get_logger().info('Spawning robot')
+        robot = Robot(request.robot_name, [request.x, request.y], 'ant.png', 0.01*3779.52, self)
+        self.robots.append(robot)
+        self.subscribers[
+                    request.robot_name
+                ] = (robot, 
+                     self.create_subscription(
+                        Twist,
+                        f'{request.robot_name}/cmd_vel',
+                        robot.process_cmd_vel,
+                        1
+                    )) 
+        return response
 
     def run(self):
         pygame.event.get()
