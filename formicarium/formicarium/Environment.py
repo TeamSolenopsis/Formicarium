@@ -8,5 +8,6 @@ class Environment(IEnvironment):
         self.height = height
 
     def GetMap(self) -> pygame.Surface:
-        pass
+        pygame.display.set_caption("env")
+        self.map = pygame.display.set_mode((self.width, self.height))
 
