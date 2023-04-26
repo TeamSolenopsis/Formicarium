@@ -5,19 +5,22 @@ import math
 from geometry_msgs.msg import Twist, Pose
 from nav_msgs.msg import Odometry
 
-import Environment
-import DiffRobot
-import Lidar
-import RobotConfig
+import formicarium.DiffRobot as DiffRobot
+import formicarium.Lidar as Lidar
+import formicarium.RobotConfig as RobotConfig
+import formicarium.Environment as Environment
 from formicarium_interfaces.srv import Spawner
 
 
 class Formicarium(Node):
     def __init__(self):
-        self.environment = Environment.Environment()
+        super().__init__('sim_formicarium')
+        pygame.init()
+
+        self.environment = Environment.Environment(1200, 800)
         self.robots = {}
         self.spawn_serv = self.create_service(Spawner, 'spawn', self.Spawn)
-        self.timer = self.create_timer(1.0 / 60.0, self.Update)
+        self.timer = self.create_timer(1.0 / 30.0, self.Update)
 
     def Spawn(self, request, response):
         odomPub = self.create_publisher(Odometry, 'odom', 10)
@@ -27,15 +30,20 @@ class Formicarium(Node):
         robot = DiffRobot.DiffRobot(request.robot_name, RobotConfig.WheelRadius, RobotConfig.WheelBase,
                                     request.x, request.y, odomPub, posePub, lidar, RobotConfig.ImagePath)
         self.robots[request.robot_name] = (robot, self.create_subscription(
-            Twist, robot.name + '/cmd_vel', robot.cmd_vel_callback, 10))
+            Twist, request.robot_name + '/cmd_vel', robot.CmdVelCallback, 10))
 
-        response.robot_names = [robot.name for robot in self.robots]
+        response.robot_names = list(self.robots.keys())
         return response
 
     def Update(self):
-        env = self.environment.GetMap()
+        pygame.event.get()
+        map = self.environment.GetMap()
         for robot in self.robots.values():
-            robot[0].Draw(env)
+            robot[0].Draw(map)
+        pygame.display.update()
+        brown = (139, 69, 19)
+        map.fill(brown)
+        pygame.draw.rect(map, (0, 0, 255), pygame.Rect(0, 0, 1200, 1200), width=20)
 
 
 def main(args=None):

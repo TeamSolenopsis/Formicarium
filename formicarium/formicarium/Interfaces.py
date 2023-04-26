@@ -9,10 +9,6 @@ class IRobot(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def GetName(self) -> str:
-        pass
-
-    @abc.abstractmethod
     def CmdVelCallback(self, msg: Twist) -> None:
         pass
 

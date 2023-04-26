@@ -1,10 +1,9 @@
 from formicarium.Interfaces import IPublisher, ILidar, IRobot
-from pygame import Surface, transform, image
+from pygame import Surface, transform, image, time
 from geometry_msgs.msg import Pose, Quaternion, Vector3
 from nav_msgs.msg import Odometry
 from math import sin, cos, pi, degrees
 from geometry_msgs.msg import Twist
-import time
 
 
 class DiffRobot(IRobot):
@@ -33,26 +32,21 @@ class DiffRobot(IRobot):
         if startY < 0:
             raise ValueError("Start Y is not positive")
 
-        self.robotName = robotName
         self.lidar = lidar
         self.wheelRadius = wheelRadius
         self.wheelBase = wheelBase
-        self.position = (float(startX), float(startY))
+        self.x = startX
+        self.y = startY
         self.odomPublisher = odomPublisher
         self.posePublisher = posePublisher
         self.theta = 0
-        self.x = 0
-        self.y = 0
         self.m2p = 3779.5275590551
         self.img = image.load(imgPath)
         self.img = transform.scale(self.img, (80, 81))
         self.img = transform.rotate(self.img, -90)
         self.rotated = self.img
         self.rect = self.rotated.get_rect(center=(self.x, self.y))
-        self.previousTime = 0
-
-    def GetName(self) -> str:
-        return self.robotName
+        self.previousTime = time.get_ticks()
 
     def CmdVelCallback(self, msg: Twist) -> None:
         if msg is None:
@@ -65,16 +59,16 @@ class DiffRobot(IRobot):
         self.vel_l = (v - w * (L / 2)) / r
         self.vel_r = (v + w * (L / 2)) / r
 
-        currentTime = time.time()
-        deltaTime = currentTime - self.previousTime
+        deltaTime = (time.get_ticks() - self.previousTime) / 1000
+        self.previousTime = time.get_ticks()
         self.Move(self.vel_l, self.vel_r, deltaTime)
 
     def Draw(self, map: Surface) -> None:
         if map is None:
             raise ValueError("Map is not set")
 
-        map.blit(self.rotated, self.rect)
         self.lidar.Scan(map)
+        map.blit(self.rotated, self.rect)
 
     def Move(self, leftVelocity: float, rightVelocity: float, deltaTime: float) -> None:
         if deltaTime <= 0:
@@ -102,8 +96,8 @@ class DiffRobot(IRobot):
         odom = Odometry()
         odom.header.frame_id = "odom"
         odom.child_frame_id = "base_link"
-        odom.pose.pose.position.x = self.position[0]
-        odom.pose.pose.position.y = self.position[1]
+        odom.pose.pose.position.x = self.x
+        odom.pose.pose.position.y = self.y
         odom.pose.pose.position.z = 0.0
         odom.pose.pose.orientation = self.euler_to_quaternion(self.theta * pi / 2)
         odom.twist.twist.linear = Vector3()
@@ -113,8 +107,8 @@ class DiffRobot(IRobot):
 
     def PublishPose(self) -> None:
         pose = Pose()
-        pose.position.x = self.position[0]
-        pose.position.y = self.position[1]
+        pose.position.x = self.x
+        pose.position.y = self.y
         pose.position.z = 0.0
         pose.orientation = self.euler_to_quaternion(self.theta * pi / 2)
 
