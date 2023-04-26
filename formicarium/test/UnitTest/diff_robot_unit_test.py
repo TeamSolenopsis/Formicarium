@@ -121,16 +121,6 @@ class DiffRobotUnitTest(TestCase):
 
         self.assertTrue(lidar.scanCalled)
 
-    def test_Move_call_lidar_setPosition(self):
-        lidar = Lidar_Stub()
-        odomPublisher = Publisher_Stub()
-        posePublisher = Publisher_Stub()
-
-        robot = DiffRobot.DiffRobot(1, 1, 1, 1, odomPublisher, posePublisher, lidar, 'formicarium/ant.png')
-        robot.Move(1, 1, 1)
-
-        self.assertTrue(lidar.setPositionCalled)
-
     def test_Draw_call_map_none_throw(self):
         lidar = Lidar_Stub()
         odomPublisher = Publisher_Stub()
@@ -141,7 +131,7 @@ class DiffRobotUnitTest(TestCase):
         with self.assertRaises(ValueError):
             robot.Draw(None)
 
-    def test_move_call_leftVelocity_zero_nothrow(self):
+    def test_move_call_nothrow(self):
         lidar = Lidar_Stub()
         odomPublisher = Publisher_Stub()
         posePublisher = Publisher_Stub()
@@ -149,62 +139,6 @@ class DiffRobotUnitTest(TestCase):
         robot = DiffRobot.DiffRobot(1, 1, 1, 1, odomPublisher, posePublisher, lidar, 'formicarium/ant.png')
 
         try:
-            robot.Move(0, 1, 1)
-        except Exception as e:
-            assert False, f"Unexpected exception: {e}"
-
-    def test_move_call_rightVelocity_zero_nothrow(self):
-        lidar = Lidar_Stub()
-        odomPublisher = Publisher_Stub()
-        posePublisher = Publisher_Stub()
-
-        robot = DiffRobot.DiffRobot(1, 1, 1, 1, odomPublisher, posePublisher, lidar, 'formicarium/ant.png')
-
-        try:
-            robot.Move(0, 1, 1)
-        except Exception as e:
-            assert False, f"Unexpected exception: {e}"
-
-    def test_move_call_deltatime_zero_throw(self):
-        lidar = Lidar_Stub()
-        odomPublisher = Publisher_Stub()
-        posePublisher = Publisher_Stub()
-
-        robot = DiffRobot.DiffRobot(1, 1, 1, 1, odomPublisher, posePublisher, lidar, 'formicarium/ant.png')
-
-        with self.assertRaises(ValueError):
-            robot.Move(1, 1, 0)
-
-    def test_move_call_deltatime_negative_throw(self):
-        lidar = Lidar_Stub()
-        odomPublisher = Publisher_Stub()
-        posePublisher = Publisher_Stub()
-
-        robot = DiffRobot.DiffRobot(1, 1, 1, 1, odomPublisher, posePublisher, lidar, 'formicarium/ant.png')
-
-        with self.assertRaises(ValueError):
-            robot.Move(1, 1, -1)
-
-    def test_move_call_leftVelocity_negative_nothrow(self):
-        lidar = Lidar_Stub()
-        odomPublisher = Publisher_Stub()
-        posePublisher = Publisher_Stub()
-
-        robot = DiffRobot.DiffRobot(2, 1, 1, 1, odomPublisher, posePublisher, lidar, 'formicarium/ant.png')
-
-        try:
-            robot.Move(-1, 1, 1)
-        except Exception as e:
-            assert False, f"Unexpected exception: {e}"
-
-    def test_move_call_rightVelocity_negative_nothrow(self):
-        lidar = Lidar_Stub()
-        odomPublisher = Publisher_Stub()
-        posePublisher = Publisher_Stub()
-
-        robot = DiffRobot.DiffRobot(2, 1, 1, 1, odomPublisher, posePublisher, lidar, 'formicarium/ant.png')
-
-        try:
-            robot.Move(1, -1, 1)
+            robot.Move()
         except Exception as e:
             assert False, f"Unexpected exception: {e}"

@@ -27,7 +27,7 @@ class Formicarium(Node):
         posePub = self.create_publisher(Pose, 'pose', 10)
         scanPub = self.create_publisher(Twist, 'scan', 10)
         lidar = Lidar.Lidar(500, request.x, request.y, scanPub)
-        robot = DiffRobot.DiffRobot(request.robot_name, RobotConfig.WheelRadius, RobotConfig.WheelBase,
+        robot = DiffRobot.DiffRobot(RobotConfig.WheelRadius, RobotConfig.WheelBase,
                                     request.x, request.y, odomPub, posePub, lidar, RobotConfig.ImagePath)
         self.robots[request.robot_name] = (robot, self.create_subscription(
             Twist, request.robot_name + '/cmd_vel', robot.CmdVelCallback, 10))
@@ -39,6 +39,7 @@ class Formicarium(Node):
         pygame.event.get()
         map = self.environment.GetMap()
         for robot in self.robots.values():
+            robot[0].Move()
             robot[0].Draw(map)
         pygame.display.update()
         brown = (139, 69, 19)

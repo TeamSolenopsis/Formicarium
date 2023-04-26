@@ -13,7 +13,7 @@ class IRobot(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def Move(self, leftVelocity: float, rightVelocity: float, deltaTime: float) -> None:
+    def Move(self) -> None:
         pass
 
     @abc.abstractmethod
