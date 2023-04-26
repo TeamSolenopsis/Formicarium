@@ -20,7 +20,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'sim_formicarium = formicarium.sim_formicarium:main'
+            'formicarium = formicarium.formicarium:main'
         ],
     },
 )

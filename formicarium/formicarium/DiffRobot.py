@@ -3,12 +3,13 @@ from pygame import Surface, transform, image
 from geometry_msgs.msg import Pose, Quaternion, Vector3
 from nav_msgs.msg import Odometry
 from math import sin, cos, pi, degrees
+from geometry_msgs.msg import Twist
+import time
 
 
 class DiffRobot(IRobot):
-    def __init__(
-            self, wheelRadius: float, wheelBase: float, startX: float, startY: float, odomPublisher: IPublisher,
-            posePublisher: IPublisher, lidar: ILidar, imgPath: str) -> None:
+    def __init__(self, robotName: str, wheelRadius: float, wheelBase: float, startX: float, startY: float,
+                 odomPublisher: IPublisher, posePublisher: IPublisher, lidar: ILidar, imgPath: str) -> None:
         super().__init__()
 
         if odomPublisher is None:
@@ -32,6 +33,7 @@ class DiffRobot(IRobot):
         if startY < 0:
             raise ValueError("Start Y is not positive")
 
+        self.robotName = robotName
         self.lidar = lidar
         self.wheelRadius = wheelRadius
         self.wheelBase = wheelBase
@@ -47,6 +49,25 @@ class DiffRobot(IRobot):
         self.img = transform.rotate(self.img, -90)
         self.rotated = self.img
         self.rect = self.rotated.get_rect(center=(self.x, self.y))
+        self.previousTime = 0
+
+    def GetName(self) -> str:
+        return self.robotName
+
+    def CmdVelCallback(self, msg: Twist) -> None:
+        if msg is None:
+            raise ValueError("Message is not set")
+
+        v = msg.linear.x
+        w = msg.angular.z
+        L = self.wheelBase
+        r = self.wheelRadius
+        self.vel_l = (v - w * (L / 2)) / r
+        self.vel_r = (v + w * (L / 2)) / r
+
+        currentTime = time.time()
+        deltaTime = currentTime - self.previousTime
+        self.Move(self.vel_l, self.vel_r, deltaTime)
 
     def Draw(self, map: Surface) -> None:
         if map is None:

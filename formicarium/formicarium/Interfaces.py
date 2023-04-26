@@ -1,10 +1,19 @@
 import abc
 from pygame import Surface
+from geometry_msgs.msg import Twist
 
 
 class IRobot(abc.ABC):
     @abc.abstractmethod
     def Draw(self, map: Surface) -> None:
+        pass
+
+    @abc.abstractmethod
+    def GetName(self) -> str:
+        pass
+
+    @abc.abstractmethod
+    def CmdVelCallback(self, msg: Twist) -> None:
         pass
 
     @abc.abstractmethod
