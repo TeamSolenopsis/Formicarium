@@ -8,7 +8,7 @@ from geometry_msgs.msg import Twist
 
 class DiffRobot(IRobot):
     def __init__(self, wheelRadius: float, wheelBase: float, startX: float, startY: float,
-                 odomPublisher: IPublisher, posePublisher: IPublisher, lidar: ILidar, imgPath: str) -> None:
+                 odomPublisher: IPublisher, posePublisher: IPublisher, lidar: ILidar, img: image) -> None:
         super().__init__()
 
         if odomPublisher is None:
@@ -39,10 +39,10 @@ class DiffRobot(IRobot):
         self.posePublisher = posePublisher
         self.theta = 0
         self.m2p = 3779.5275590551
-        self.img = image.load(imgPath)
+        self.img = img
         self.img = transform.scale(self.img, (80, 81))
         self.img = transform.rotate(self.img, -90)
-        self.wheelBase = self.img.get_width()
+        self.wheelBase = wheelBase
         self.wheelRadius = wheelRadius
         self.rotated = self.img
         self.rect = self.rotated.get_rect(center=(self.x, self.y))
@@ -54,12 +54,12 @@ class DiffRobot(IRobot):
         if msg is None:
             raise ValueError("Message is not set")
 
-        v = msg.linear.x
+        v = msg.linear.x * self.m2p
         w = msg.angular.z
         L = self.wheelBase
         r = self.wheelRadius
-        self.vel_l = ((v - w * (L / 2)) / r) * self.m2p
-        self.vel_r = ((v + w * (L / 2)) / r) * self.m2p
+        self.vel_l = ((v - w * (L / 2)) / r)
+        self.vel_r = ((v + w * (L / 2)) / r)
         print((self.vel_l, self.vel_r))
 
     def Draw(self, map: Surface) -> None:
@@ -75,10 +75,11 @@ class DiffRobot(IRobot):
         self.previousTime = time.get_ticks()
 
         self.theta += (self.vel_r - self.vel_l) / self.wheelBase * deltaTime
+        print((self.vel_r - self.vel_l) / self.wheelBase * deltaTime)
         self.x += ((self.vel_l+self.vel_r)/2) * cos(self.theta) * deltaTime
         self.y -= ((self.vel_l+self.vel_r)/2) * sin(self.theta) * deltaTime
 
-        self.rotated = transform.rotozoom(self.img, degrees(self.theta), 1)
+        self.rotated = transform.rotate(self.img, degrees(self.theta))
         self.rect = self.rotated.get_rect(center=(self.x, self.y))
         self.lidar.SetPosition(self.x, self.y)
 
