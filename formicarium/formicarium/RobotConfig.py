@@ -5,7 +5,7 @@ image = image.load(f'{getcwd()}/src/Formicarium/formicarium/robot.png')
 Width = image.get_width()
 Height = image.get_height()
 WheelBase = Width
-divosor = 3
-WheelDiameter = Height / divosor
+divisor = 3
+WheelDiameter = Height / divisor
 WheelRadius = WheelDiameter / 2
 
