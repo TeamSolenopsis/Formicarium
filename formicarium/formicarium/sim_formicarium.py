@@ -63,7 +63,7 @@ class Environment:
         self.yellow = (255, 255, 0)
         self.brown = (234, 182, 118)
 
-        self.height = dimentions[0]
+        self.height = dimenstions[0]
         self.width = dimentions[1]
 
         pygame.display.set_caption("env")
