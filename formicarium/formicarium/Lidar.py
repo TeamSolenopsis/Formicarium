@@ -11,12 +11,6 @@ class Lidar(ILidar):
         if range < 0:
             raise ValueError("Range cannot be negative")
 
-        if xPos < 0:
-            raise ValueError("xPos cannot be negative")
-
-        if yPos < 0:
-            raise ValueError("yPos cannot be negative")
-
         if scanPub is None:
             raise ValueError("scanPub cannot be None")
 
@@ -55,12 +49,6 @@ class Lidar(ILidar):
         return data
 
     def SetPosition(self, x: float, y: float) -> tuple[float, float]:
-        if x < 0:
-            raise ValueError("x cannot be negative")
-
-        if y < 0:
-            raise ValueError("y cannot be negative")
-
         self.position = (x, y)
 
         return self.position

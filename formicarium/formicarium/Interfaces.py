@@ -1,7 +1,7 @@
 import abc
 from pygame import Surface
 from geometry_msgs.msg import Twist
-
+from nav_msgs.msg import Odometry
 
 class IRobot(abc.ABC):
     @abc.abstractmethod
@@ -17,7 +17,7 @@ class IRobot(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def PublishOdometry(self) -> None:
+    def get_odometry(self) -> Odometry:
         pass
 
     @abc.abstractmethod
