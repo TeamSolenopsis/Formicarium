@@ -13,7 +13,7 @@ class DiffRobotUnitTest(TestCase):
         posePublisher = Publisher_Stub()
 
         try:
-            robot = DiffRobot.DiffRobot(1, 1, 1, 1, odomPublisher, posePublisher, lidar, 'formicarium/ant.png')
+            robot = DiffRobot.DiffRobot(1, 1, 1, 1, odomPublisher, posePublisher, lidar, 'formicarium/robot.png')
             self.assertIsNotNone(robot)
         except Exception as e:
             assert False, f"Unexpected exception: {e}"
@@ -24,7 +24,7 @@ class DiffRobotUnitTest(TestCase):
         posePublisher = Publisher_Stub()
 
         with self.assertRaises(ValueError):
-            robot = DiffRobot.DiffRobot(1, 1, 1, 1, odomPublisher, posePublisher, lidar, 'formicarium/ant.png')
+            robot = DiffRobot.DiffRobot(1, 1, 1, 1, odomPublisher, posePublisher, lidar, 'formicarium/robot.png')
 
     def test_create_robot_posePublisher_none_throw(self):
         lidar = Lidar_Stub()
@@ -32,7 +32,7 @@ class DiffRobotUnitTest(TestCase):
         posePublisher = None
 
         with self.assertRaises(ValueError):
-            robot = DiffRobot.DiffRobot(1, 1, 1, 1, odomPublisher, posePublisher, lidar, 'formicarium/ant.png')
+            robot = DiffRobot.DiffRobot(1, 1, 1, 1, odomPublisher, posePublisher, lidar, 'formicarium/robot.png')
 
     def test_create_robot_lidar_none_throw(self):
         lidar = None
@@ -40,7 +40,7 @@ class DiffRobotUnitTest(TestCase):
         posePublisher = Publisher_Stub()
 
         with self.assertRaises(ValueError):
-            robot = DiffRobot.DiffRobot(1, 1, 1, 1, odomPublisher, posePublisher, lidar, 'formicarium/ant.png')
+            robot = DiffRobot.DiffRobot(1, 1, 1, 1, odomPublisher, posePublisher, lidar, 'formicarium/robot.png')
 
     def test_create_robot_wheelRadius_negative_throw(self):
         lidar = Lidar_Stub()
@@ -48,7 +48,7 @@ class DiffRobotUnitTest(TestCase):
         posePublisher = Publisher_Stub()
 
         with self.assertRaises(ValueError):
-            robot = DiffRobot.DiffRobot(-1, 1, 1, 1, odomPublisher, posePublisher, lidar, 'formicarium/ant.png')
+            robot = DiffRobot.DiffRobot(-1, 1, 1, 1, odomPublisher, posePublisher, lidar, 'formicarium/robot.png')
 
     def test_create_robot_wheelBase_negative_throw(self):
         lidar = Lidar_Stub()
@@ -56,7 +56,7 @@ class DiffRobotUnitTest(TestCase):
         posePublisher = Publisher_Stub()
 
         with self.assertRaises(ValueError):
-            robot = DiffRobot.DiffRobot(1, -1, 1, 1, odomPublisher, posePublisher, lidar, 'formicarium/ant.png')
+            robot = DiffRobot.DiffRobot(1, -1, 1, 1, odomPublisher, posePublisher, lidar, 'formicarium/robot.png')
 
     def test_create_robot_startX_negative_throw(self):
         lidar = Lidar_Stub()
@@ -64,7 +64,7 @@ class DiffRobotUnitTest(TestCase):
         posePublisher = Publisher_Stub()
 
         with self.assertRaises(ValueError):
-            robot = DiffRobot.DiffRobot(1, 1, -1, 1, odomPublisher, posePublisher, lidar, 'formicarium/ant.png')
+            robot = DiffRobot.DiffRobot(1, 1, -1, 1, odomPublisher, posePublisher, lidar, 'formicarium/robot.png')
 
     def test_create_robot_startY_negative_throw(self):
         lidar = Lidar_Stub()
@@ -72,7 +72,7 @@ class DiffRobotUnitTest(TestCase):
         posePublisher = Publisher_Stub()
 
         with self.assertRaises(ValueError):
-            robot = DiffRobot.DiffRobot(1, 1, 1, -1, odomPublisher, posePublisher, lidar, 'formicarium/ant.png')
+            robot = DiffRobot.DiffRobot(1, 1, 1, -1, odomPublisher, posePublisher, lidar, 'formicarium/robot.png')
 
     def test_create_robot_wheelRadius_zero_throw(self):
         lidar = Lidar_Stub()
@@ -80,7 +80,7 @@ class DiffRobotUnitTest(TestCase):
         posePublisher = Publisher_Stub()
 
         with self.assertRaises(ValueError):
-            robot = DiffRobot.DiffRobot(0, 1, 1, 1, odomPublisher, posePublisher, lidar, 'formicarium/ant.png')
+            robot = DiffRobot.DiffRobot(0, 1, 1, 1, odomPublisher, posePublisher, lidar, 'formicarium/robot.png')
 
     def test_create_robot_wheelBase_zero_throw(self):
         lidar = Lidar_Stub()
@@ -88,14 +88,14 @@ class DiffRobotUnitTest(TestCase):
         posePublisher = Publisher_Stub()
 
         with self.assertRaises(ValueError):
-            robot = DiffRobot.DiffRobot(1, 0, 1, 1, odomPublisher, posePublisher, lidar, 'formicarium/ant.png')
+            robot = DiffRobot.DiffRobot(1, 0, 1, 1, odomPublisher, posePublisher, lidar, 'formicarium/robot.png')
 
     def test_GetOdometry_call_odomPublisher_publish(self):
         lidar = Lidar_Stub()
         odomPublisher = Publisher_Stub()
         posePublisher = Publisher_Stub()
 
-        robot = DiffRobot.DiffRobot(1, 1, 1, 1, odomPublisher, posePublisher, lidar, 'formicarium/ant.png')
+        robot = DiffRobot.DiffRobot(1, 1, 1, 1, odomPublisher, posePublisher, lidar, 'formicarium/robot.png')
         robot.PublishOdometry()
 
         self.assertTrue(odomPublisher.publisherCalled)
@@ -105,7 +105,7 @@ class DiffRobotUnitTest(TestCase):
         odomPublisher = Publisher_Stub()
         posePublisher = Publisher_Stub()
 
-        robot = DiffRobot.DiffRobot(1, 1, 1, 1, odomPublisher, posePublisher, lidar, 'formicarium/ant.png')
+        robot = DiffRobot.DiffRobot(1, 1, 1, 1, odomPublisher, posePublisher, lidar, 'formicarium/robot.png')
         robot.PublishPose()
 
         self.assertTrue(posePublisher.publisherCalled)
@@ -116,7 +116,7 @@ class DiffRobotUnitTest(TestCase):
         posePublisher = Publisher_Stub()
         map = Surface((100, 100))
 
-        robot = DiffRobot.DiffRobot(1, 1, 1, 1, odomPublisher, posePublisher, lidar, 'formicarium/ant.png')
+        robot = DiffRobot.DiffRobot(1, 1, 1, 1, odomPublisher, posePublisher, lidar, 'formicarium/robot.png')
         robot.Draw(map)
 
         self.assertTrue(lidar.scanCalled)
@@ -126,7 +126,7 @@ class DiffRobotUnitTest(TestCase):
         odomPublisher = Publisher_Stub()
         posePublisher = Publisher_Stub()
 
-        robot = DiffRobot.DiffRobot(1, 1, 1, 1, odomPublisher, posePublisher, lidar, 'formicarium/ant.png')
+        robot = DiffRobot.DiffRobot(1, 1, 1, 1, odomPublisher, posePublisher, lidar, 'formicarium/robot.png')
 
         with self.assertRaises(ValueError):
             robot.Draw(None)
@@ -136,7 +136,7 @@ class DiffRobotUnitTest(TestCase):
         odomPublisher = Publisher_Stub()
         posePublisher = Publisher_Stub()
 
-        robot = DiffRobot.DiffRobot(1, 1, 1, 1, odomPublisher, posePublisher, lidar, 'formicarium/ant.png')
+        robot = DiffRobot.DiffRobot(1, 1, 1, 1, odomPublisher, posePublisher, lidar, 'formicarium/robot.png')
 
         try:
             robot.Move()
