@@ -37,7 +37,7 @@ class LIDAR(object):
 
             # find endpoint
             for i in range(100):
-                j = i/100
+                j = i / 100
                 x_t = int(x_i * j + x_0 * (1 - j))
                 y_t = int(y_i * j + y_0 * (1 - j))
                 if not (0 <= x_t < env.width and 0 <= y_t < env.height):
