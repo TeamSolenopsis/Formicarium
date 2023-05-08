@@ -39,7 +39,7 @@ class Lidar(ILidar):
 
             # find endpoint
             for i in range(15, 100):
-                j = i/100
+                j = i / 100
                 x_t = int(x_i * j + x_0 * (1 - j))
                 y_t = int(y_i * j + y_0 * (1 - j))
                 if not (0 <= x_t < map.get_width() and 0 <= y_t < map.get_height()):
