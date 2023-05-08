@@ -16,13 +16,19 @@ class Formicarium(Node):
     def __init__(self):
         super().__init__('sim_formicarium')
         pygame.init()
-
-        self.environment = Environment.Environment(1200, 800)
+        self.environment_width = 1200
+        self.environment_height = 800
+        self.environment = Environment.Environment(self.environment_width, self.environment_height)
         self.robots = {}
         self.spawn_serv = self.create_service(Spawner, 'spawn', self.Spawn)
         self.timer = self.create_timer(1.0 / 30.0, self.Update)
 
     def Spawn(self, request, response):
+        if not self.validate_spawn_pose(request.x, request.y):
+            response.robot_names = list(self.robots.keys()) 
+            response.error_message = f'Start position {request.x, request.y} is out of bounds for robot {request.robot_name}'
+            return response
+        
         odomPub = self.create_publisher(Odometry, 'odom', 10)
         posePub = self.create_publisher(Pose, 'pose', 10)
         scanPub = self.create_publisher(Twist, 'scan', 10)
@@ -46,7 +52,9 @@ class Formicarium(Node):
         map.fill(brown)
         pygame.draw.rect(map, (0, 0, 255), pygame.Rect(0, 0, 1200, 1200), width=20)
 
-
+    def validate_spawn_pose(self, x:float, y:float):
+        return RobotConfig.Width / 2 < x and x < (self.environment_width - (RobotConfig.Width / 2)) and RobotConfig.Height / 2 < y and y < (self.environment_height - (RobotConfig.Height / 2))
+    
 def main(args=None):
     rclpy.init(args=args)
 
