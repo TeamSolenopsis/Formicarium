@@ -7,12 +7,9 @@ from geometry_msgs.msg import Twist
 
 
 class DiffRobot(IRobot):
-    def __init__(self, wheelRadius: float, wheelBase: float, startX: float, startY: float,
-                 odomPublisher: IPublisher, posePublisher: IPublisher, lidar: ILidar, img: image) -> None:
+    def __init__(self, name:str, wheelRadius: float, wheelBase: float, startX: float, startY: float,
+                 posePublisher: IPublisher, lidar: ILidar, img: image) -> None:
         super().__init__()
-
-        if odomPublisher is None:
-            raise ValueError("OdomPublisher is not set")
 
         if posePublisher is None:
             raise ValueError("PosePublisher is not set")
@@ -26,10 +23,10 @@ class DiffRobot(IRobot):
         if wheelBase <= 0:
             raise ValueError("Wheel base is not positive")
 
+        self.name = name
         self.lidar = lidar
         self.x = startX
         self.y = startY
-        self.odomPublisher = odomPublisher
         self.posePublisher = posePublisher
         self.theta = 0
         self.m2p = 3779.5275590551
@@ -43,13 +40,17 @@ class DiffRobot(IRobot):
         self.previousTime = time.get_ticks()
         self.vel_l = 0
         self.vel_r = 0
+        self.linear = Vector3()
+        self.angular = Vector3()
 
     def CmdVelCallback(self, msg: Twist) -> None:
         if msg is None:
             raise ValueError("Message is not set")
+        self.linear = msg.linear
+        self.angular = msg.angular
 
-        v = msg.linear.x * self.m2p
-        w = msg.angular.z * (self.m2p / self.wheelBase)
+        v = self.linear.x * self.m2p
+        w = self.angular.z * (self.m2p / self.wheelBase)
         L = self.wheelBase
         r = self.wheelRadius
         self.vel_l = ((v - w * (L / 2)) / r)
@@ -81,7 +82,7 @@ class DiffRobot(IRobot):
         qw = cos(yaw/2)
         return Quaternion(x=qx, y=qy, z=qz, w=qw)
 
-    def PublishOdometry(self) -> None:
+    def get_odometry(self) -> Odometry:
         odom = Odometry()
         odom.header.frame_id = "odom"
         odom.child_frame_id = "base_link"
@@ -89,10 +90,10 @@ class DiffRobot(IRobot):
         odom.pose.pose.position.y = float(self.y)
         odom.pose.pose.position.z = 0.0
         odom.pose.pose.orientation = self.euler_to_quaternion(self.theta * pi / 2)
-        odom.twist.twist.linear = Vector3()
-        odom.twist.twist.angular = Vector3()
+        odom.twist.twist.linear = self.linear
+        odom.twist.twist.angular = self.angular
 
-        self.odomPublisher.Publish(odom)
+        return odom
 
     def PublishPose(self) -> None:
         pose = Pose()
@@ -101,4 +102,4 @@ class DiffRobot(IRobot):
         pose.position.z = 0.0
         pose.orientation = self.euler_to_quaternion(self.theta * pi / 2)
 
-        self.posePublisher.Publish(pose)
+        self.posePublisher.publish(pose)
