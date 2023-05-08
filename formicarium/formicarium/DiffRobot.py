@@ -73,7 +73,7 @@ class DiffRobot(IRobot):
         self.previousTime = time.get_ticks()
 
         self.theta += (self.vel_r - self.vel_l) / self.wheelBase * deltaTime
-        self.x += ((self.vel_l+self.vel_r)/2) * cos(self.theta) * deltaTime
+        self.x += ((self.vel_l + self.vel_r) / 2) * cos(self.theta) * deltaTime
         self.y -= ((self.vel_l+self.vel_r)/2) * sin(self.theta) * deltaTime
 
         self.rotated = transform.rotate(self.img, degrees(self.theta) % 360)
