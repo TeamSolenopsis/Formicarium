@@ -38,7 +38,7 @@ class Lidar(ILidar):
             x_i, y_i = (x_0 + self.range * math.cos(angle)), (y_0 - self.range * math.sin(angle))
 
             # find endpoint
-            for i in range(15, 100):
+            for i in range(18, 100):
                 j = i / 100
                 x_t = int(x_i * j + x_0 * (1 - j))
                 y_t = int(y_i * j + y_0 * (1 - j))

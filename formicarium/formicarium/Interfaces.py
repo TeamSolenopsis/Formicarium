@@ -5,7 +5,7 @@ from geometry_msgs.msg import Twist
 
 class IRobot(abc.ABC):
     @abc.abstractmethod
-    def Draw(self, map: Surface) -> None:
+    def update(self, map: Surface) -> None:
         pass
 
     @abc.abstractmethod

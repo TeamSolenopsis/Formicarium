@@ -4,12 +4,15 @@ from geometry_msgs.msg import Pose, Quaternion, Vector3
 from nav_msgs.msg import Odometry
 from math import sin, cos, pi, degrees
 from geometry_msgs.msg import Twist
+from pygame import sprite
 
 
-class DiffRobot(IRobot):
+
+class DiffRobot(IRobot, sprite.Sprite):
     def __init__(self, wheelRadius: float, wheelBase: float, startX: float, startY: float,
                  odomPublisher: IPublisher, posePublisher: IPublisher, lidar: ILidar, img: image) -> None:
         super().__init__()
+        sprite.Sprite.__init__(self)
 
         if odomPublisher is None:
             raise ValueError("OdomPublisher is not set")
@@ -33,16 +36,21 @@ class DiffRobot(IRobot):
         self.posePublisher = posePublisher
         self.theta = 0
         self.m2p = 3779.5275590551
-        self.img = img
-        self.img = transform.scale(self.img, (80, 81))
-        self.img = transform.rotate(self.img, -90)
+        self.image = img
+        self.image = transform.scale(self.image, (80, 81))
+        self.image = transform.rotate(self.image, -90)
+        self.robot_original = self.image
         self.wheelBase = wheelBase
         self.wheelRadius = wheelRadius
-        self.rotated = self.img
-        self.rect = self.rotated.get_rect(center=(self.x, self.y))
+        self.rect = self.image.get_rect(center=(self.x, self.y))
         self.previousTime = time.get_ticks()
         self.vel_l = 0
         self.vel_r = 0
+
+    def update(self, screen:Surface) -> None:
+        self.Move()
+        self.lidar.SetPosition(self.x, self.y)
+        self.lidar.Scan(screen)
 
     def CmdVelCallback(self, msg: Twist) -> None:
         if msg is None:
@@ -55,13 +63,6 @@ class DiffRobot(IRobot):
         self.vel_l = ((v - w * (L / 2)) / r)
         self.vel_r = ((v + w * (L / 2)) / r)
 
-    def Draw(self, map: Surface) -> None:
-        if map is None:
-            raise ValueError("Map is not set")
-
-        self.lidar.Scan(map)
-        map.blit(self.rotated, self.rect)
-
     def Move(self) -> None:
         deltaTime = (time.get_ticks() - self.previousTime) / 1000
         self.previousTime = time.get_ticks()
@@ -69,9 +70,10 @@ class DiffRobot(IRobot):
         self.theta += (self.vel_r - self.vel_l) / self.wheelBase * deltaTime
         self.x += ((self.vel_l + self.vel_r) / 2) * cos(self.theta) * deltaTime
         self.y -= ((self.vel_l + self.vel_r) / 2) * sin(self.theta) * deltaTime
-
-        self.rotated = transform.rotate(self.img, degrees(self.theta) % 360)
-        self.rect = self.rotated.get_rect(center=(self.x, self.y))
+        
+        self.image = transform.rotate(self.robot_original, degrees(self.theta) % 360)
+        self.rect = self.image.get_rect(center=(self.x, self.y))
+        self.rect.center = (self.x, self.y)
         self.lidar.SetPosition(self.x, self.y)
 
     def euler_to_quaternion(self, yaw):

@@ -43,8 +43,6 @@ class Formicarium(Node):
         return response
 
     def Update(self):
-        pygame.event.get()
-        pygame.display.update()
         self.environment.Update()
 
     def validate_spawn_pose(self, x:float, y:float):
