@@ -10,8 +10,8 @@ class Environment(IEnvironment, ICollider):
         pygame.display.set_caption("env")
         self.screen = pygame.display.set_mode((self.width, self.height))
         self.robot_group = pygame.sprite.Group()
-        self.brown = pygame.color.Color(139, 69, 19, 255)
-        self.red = pygame.color.Color(255, 0, 0, 255)
+        self.color_background = pygame.color.Color(139, 69, 19, 255)
+        self.color_laser = pygame.color.Color(255, 0, 0, 255)
 
     def Update(self):
         self.robot_group.update(self.screen)
@@ -19,8 +19,9 @@ class Environment(IEnvironment, ICollider):
         pygame.event.get()
         pygame.display.update()
         
-        self.screen.fill(self.brown)
+        self.screen.fill(self.color_background)
         pygame.draw.rect(self.screen, (0, 0, 255), pygame.Rect(0, 0, 1200, 1200), width=20)
+        pygame.draw.rect(self.screen, (0, 0, 255), pygame.Rect(300, 300,300,300), width=20)
 
     def AddRobot(self, robot: IRobot) -> None:
         self.robot_group.add(robot)
@@ -31,7 +32,7 @@ class Environment(IEnvironment, ICollider):
             if robot.rect.collidepoint(x, y):
                 return True
             
-        if self.screen.get_at((int(x), int(y))) != self.brown and self.screen.get_at((x,y)) != self.red:
+        if self.screen.get_at((x,y)) != self.color_background and self.screen.get_at((x,y)) != self.color_laser:
             return True
         
         return False
