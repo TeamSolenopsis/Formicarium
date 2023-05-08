@@ -53,7 +53,7 @@ class Formicarium(Node):
         pygame.draw.rect(map, (0, 0, 255), pygame.Rect(0, 0, 1200, 1200), width=20)
 
     def validate_spawn_pose(self, x:float, y:float):
-        return RobotConfig.Width / 2 < x and x < (self.environment_width - RobotConfig.Width / 2) and RobotConfig.Height / 2 < y and y < (self.environment_height - RobotConfig.Height / 2)
+        return RobotConfig.Width / 2 < x and x < (self.environment_width - (RobotConfig.Width / 2)) and RobotConfig.Height / 2 < y and y < (self.environment_height - (RobotConfig.Height / 2))
     
 def main(args=None):
     rclpy.init(args=args)
