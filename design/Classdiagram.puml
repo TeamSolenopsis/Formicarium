@@ -39,17 +39,18 @@ interface ILidar{
 }
 
 class Lidar{
-    +Lidar(range: float, xPos: float, yPos: float, scanPub: IPublisher)
+    +Lidar(collider:ICollider, range: float, xPos: float, yPos: float, scanPub: IPublisher)
 }
 
 IEnvironment <|-- Environment
 ICollider <|-left- Environment
 Formicarium *-left- IEnvironment
-Formicarium *-right- IRobot 
+Environment o-right- IRobot 
 
 Formicarium ..> Lidar
+Formicarium ..> DiffRobot
 
-IRobot <|-- DiffRobot
+IRobot <|-right- DiffRobot
 ILidar <|-- Lidar
 DiffRobot o-- ILidar
 Lidar o-left- ICollider

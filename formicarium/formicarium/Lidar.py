@@ -1,11 +1,11 @@
-from formicarium.Interfaces import ILidar, IPublisher
+from formicarium.Interfaces import ILidar, IPublisher, ICollider
 from pygame import Surface, draw, Color
 import numpy as np
 import math
 
 
 class Lidar(ILidar):
-    def __init__(self, range: float, xPos: float, yPos: float, scanPub: IPublisher) -> None:
+    def __init__(self, collider:ICollider, range: float, xPos: float, yPos: float, scanPub: IPublisher) -> None:
         super().__init__()
 
         if range < 0:
@@ -20,6 +20,7 @@ class Lidar(ILidar):
         if scanPub is None:
             raise ValueError("scanPub cannot be None")
 
+        self.collider = collider
         self.range = range
         self.position = (xPos, yPos)
         self.scanPub = scanPub
@@ -44,8 +45,7 @@ class Lidar(ILidar):
                 if not (0 <= x_t < map.get_width() and 0 <= y_t < map.get_height()):
                     continue
 
-                color = map.get_at((x_t, y_t))
-                if color[:-1] != self.white:
+                if self.collider.CheckCollision(x_t, y_t):
                     data.append((x_t, y_t))
                     break
 

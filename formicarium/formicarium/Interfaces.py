@@ -24,7 +24,6 @@ class IRobot(abc.ABC):
     def PublishPose(self) -> None:
         pass
 
-
 class ILidar(abc.ABC):
     @abc.abstractmethod
     def Scan(self, map: Surface) -> None:
@@ -43,5 +42,13 @@ class IPublisher(abc.ABC):
 
 class IEnvironment(abc.ABC):
     @abc.abstractmethod
-    def GetMap(self) -> Surface:
+    def Update(self) -> Surface:
+        pass
+
+    def AddRobot(self, robot: IRobot) -> None:
+        pass
+
+class ICollider(abc.ABC):
+    @abc.abstractmethod
+    def CheckCollision(self, x: float, y: float) -> bool:
         pass

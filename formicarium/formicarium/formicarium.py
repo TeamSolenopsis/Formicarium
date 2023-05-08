@@ -18,7 +18,7 @@ class Formicarium(Node):
         pygame.init()
 
         self.environment = Environment.Environment(1200, 800)
-        self.robots = {}
+        self.subscribers = {}
         self.spawn_serv = self.create_service(Spawner, 'spawn', self.Spawn)
         self.timer = self.create_timer(1.0 / 30.0, self.Update)
 
@@ -26,25 +26,20 @@ class Formicarium(Node):
         odomPub = self.create_publisher(Odometry, 'odom', 10)
         posePub = self.create_publisher(Pose, 'pose', 10)
         scanPub = self.create_publisher(Twist, 'scan', 10)
-        lidar = Lidar.Lidar(500, request.x, request.y, scanPub)
+        lidar = Lidar.Lidar(self.environment, 500, request.x, request.y, scanPub)
         robot = DiffRobot.DiffRobot(RobotConfig.WheelRadius, RobotConfig.WheelBase,
                                     request.x, request.y, odomPub, posePub, lidar, RobotConfig.image)
-        self.robots[request.robot_name] = (robot, self.create_subscription(
-            Twist, request.robot_name + '/cmd_vel', robot.CmdVelCallback, 10))
+        self.environment.AddRobot(robot)
+        self.subscribers[request.robot_name] = self.create_subscription(
+            Twist, request.robot_name + '/cmd_vel', robot.CmdVelCallback, 10)
 
-        response.robot_names = list(self.robots.keys())
+        response.robot_names = list(self.subscribers.keys())
         return response
 
     def Update(self):
         pygame.event.get()
-        map = self.environment.GetMap()
-        for robot in self.robots.values():
-            robot[0].Move()
-            robot[0].Draw(map)
         pygame.display.update()
-        brown = (139, 69, 19)
-        map.fill(brown)
-        pygame.draw.rect(map, (0, 0, 255), pygame.Rect(0, 0, 1200, 1200), width=20)
+        self.environment.Update()
 
 
 def main(args=None):
