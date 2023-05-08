@@ -1,0 +1,59 @@
+@startuml
+
+class Formicarium{
+
+}
+
+interface IEnvironment{
+    +Update()
+}
+
+interface ICollider{
+    +CheckCollision()
+}
+
+class Environment{
+    +Environment(width: float, height: float)
+}
+
+interface IPublisher{
+    +Publish(self, data)
+}
+
+interface IRobot{
+    +Draw()
+    +PublishOdometry()
+    +PublishPose()
+    +CmdVelCallback()
+    +Move()
+}
+
+class DiffRobot{
+    +DiffRobot(wheelRadius: float, wheelBase: float, startX: float, startY: float,
+                 odomPublisher: IPublisher, posePublisher: IPublisher, lidar: ILidar, img: image)
+}
+
+interface ILidar{
+    +Scan(map: Surface)
+    +SetPosition(x: float, y: float)
+}
+
+class Lidar{
+    +Lidar(range: float, xPos: float, yPos: float, scanPub: IPublisher)
+}
+
+IEnvironment <|-- Environment
+ICollider <|-left- Environment
+Formicarium *-left- IEnvironment
+Formicarium *-right- IRobot 
+
+Formicarium ..> Lidar
+
+IRobot <|-- DiffRobot
+ILidar <|-- Lidar
+DiffRobot o-- ILidar
+Lidar o-left- ICollider
+
+
+
+@enduml
