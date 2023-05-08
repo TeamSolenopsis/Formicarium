@@ -55,18 +55,16 @@ class DiffRobot(IRobot):
             raise ValueError("Message is not set")
 
         v = msg.linear.x * self.m2p
-        w = msg.angular.z
+        w = msg.angular.z * (self.m2p / self.wheelBase)
         L = self.wheelBase
         r = self.wheelRadius
         self.vel_l = ((v - w * (L / 2)) / r)
         self.vel_r = ((v + w * (L / 2)) / r)
-        print((self.vel_l, self.vel_r))
 
     def Draw(self, map: Surface) -> None:
         if map is None:
             raise ValueError("Map is not set")
 
-        print((self.x, self.y))
         self.lidar.Scan(map)
         map.blit(self.rotated, self.rect)
 
@@ -75,11 +73,10 @@ class DiffRobot(IRobot):
         self.previousTime = time.get_ticks()
 
         self.theta += (self.vel_r - self.vel_l) / self.wheelBase * deltaTime
-        print((self.vel_r - self.vel_l) / self.wheelBase * deltaTime)
         self.x += ((self.vel_l+self.vel_r)/2) * cos(self.theta) * deltaTime
         self.y -= ((self.vel_l+self.vel_r)/2) * sin(self.theta) * deltaTime
 
-        self.rotated = transform.rotate(self.img, degrees(self.theta))
+        self.rotated = transform.rotate(self.img, degrees(self.theta) % 360)
         self.rect = self.rotated.get_rect(center=(self.x, self.y))
         self.lidar.SetPosition(self.x, self.y)
 
