@@ -2,8 +2,10 @@ from os import getcwd
 from pygame import image
 
 image = image.load(f'{getcwd()}/src/Formicarium/formicarium/robot.png')
-WheelBase = image.get_width()
+Width = image.get_width()
+Height = image.get_height()
+WheelBase = Width
 divosor = 3
-WheelDiameter = image.get_height() / divosor
+WheelDiameter = Height / divosor
 WheelRadius = WheelDiameter / 2
 
