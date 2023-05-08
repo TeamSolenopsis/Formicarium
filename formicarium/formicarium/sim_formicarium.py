@@ -1,9 +1,9 @@
-#export LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libstdc++.so.6\n
+import rclpy
+from rclpy.node import Node
 import pygame
 import math
-import numpy as np
-from constants import *
-
+from os import getcwd
+import numpy as np  
 
 def distance(x_0, y_0, x_1, y_1):
         return math.sqrt((x_1 - x_0)**2 + (y_1 - y_0)**2)
@@ -77,7 +77,7 @@ class Robot:
         self.theta = 0
         self.vel = 0.01 * self.m2p
         self.ver = 0.01 * self.m2p
-        self.img = pygame.image.load(robotImg)
+        self.img = pygame.image.load(f'{getcwd()}/src/Formicarium/formicarium/{robotImg}')
         self.rotated = self.img
         self.rect = self.rotated.get_rect(center = (self.x, self.y))
         self.lidar = LIDAR(environment, position=(self.x, self.y))
@@ -87,7 +87,7 @@ class Robot:
         map.map.blit(self.rotated, self.rect)
         self.lidar.scan(map)
 
-    def move(self, vel, ver):
+    def move(self, vel, ver, dt):
         self.vel = vel * self.m2p
         self.ver = ver * self.m2p
 
@@ -99,33 +99,47 @@ class Robot:
         self.rect = self.rotated.get_rect(center = (self.x, self.y))
         self.lidar.setPosition(self.x, self.y)
 
+class SimFormicarium(Node):
+    def __init__(self):
+        super().__init__('sim_formicarium')
+        self.get_logger().info('Hello World: sim_formicarium')
 
-pygame.init()
-start = (200, 200)
-dims = (800, 1200)
-running = True
-env = Environment(dims)
+        pygame.init()
+        start = (200, 200)
+        dims = (800, 1200)
+        running = True
+        self.env = Environment(dims)
 
-# robot = Robot(start, 'robot.png', 0.01*3779.52)
+        self.timer = self.create_timer(1/100, self.run)
 
-dt = 0
-lasttime = pygame.time.get_ticks()
+        # robot = Robot(start, 'robot.png', 0.01*3779.52)
 
-while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
+        self.dt = 0
+        self.lasttime = pygame.time.get_ticks()
+            
+
+    def run(self):
+        for robot in self.env.robots:
+            robot.move(0.05, 0.04, self.dt)
+        self.dt = (pygame.time.get_ticks() - self.lasttime) / 1000
+        self.lasttime = pygame.time.get_ticks()
+        pygame.display.update()
+        self.env.map.fill(self.env.black)
+        pygame.draw.rect(self.env.map, self.env.blue, pygame.Rect(0, 0, 800, 1200), width=20)
+        # robot.draw(env.map)
+        for robot in self.env.robots:
+            robot.draw(self.env)
+
+        
+
+def main():
+    print('Hi from formicarium.')
+    rclpy.init()
+    node = SimFormicarium()
+    rclpy.spin(node)
+    rclpy.shutdown()
     
-    for robot in env.robots:
-        robot.move(0.05, 0.04)
 
-    dt = (pygame.time.get_ticks() - lasttime) / 1000
-    lasttime = pygame.time.get_ticks()
 
-    pygame.display.update()
-    env.map.fill(env.black)
-    pygame.draw.rect(env.map, env.blue, pygame.Rect(0, 0, 800, 1200), width=20)
-
-    # robot.draw(env.map)
-    for robot in env.robots:
-        robot.draw(env)
+if __name__ == '__main__':
+    main()
