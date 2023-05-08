@@ -4,6 +4,7 @@ from geometry_msgs.msg import Pose, Quaternion, Vector3
 from nav_msgs.msg import Odometry
 from math import sin, cos, pi, degrees
 from geometry_msgs.msg import Twist
+import formicarium.RobotConfig as RobotConfig
 
 
 class DiffRobot(IRobot):
@@ -55,7 +56,7 @@ class DiffRobot(IRobot):
             raise ValueError("Message is not set")
 
         v = msg.linear.x * self.m2p
-        w = msg.angular.z * (self.m2p / self.wheelBase)
+        w = msg.angular.z * (self.m2p / RobotConfig.Width)
         L = self.wheelBase
         r = self.wheelRadius
         self.vel_l = ((v - w * (L / 2)) / r)
