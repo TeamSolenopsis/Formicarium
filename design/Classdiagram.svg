@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="418px" preserveAspectRatio="none" style="width:402px;height:418px;background:#FFFFFF;" version="1.1" viewBox="0 0 402 418" width="402px" zoomAndPan="magnify"><defs/><g><!--MD5=[2df5f26bc4fdda83abaa7804835b1007]
+class Formicarium--><g id="elem_Formicarium"><rect codeLine="2" fill="#F1F1F1" height="48" id="Formicarium" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="116" x="166" y="15"/><ellipse cx="181" cy="31" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M183.9688,36.6406 Q183.3906,36.9375 182.75,37.0781 Q182.1094,37.2344 181.4063,37.2344 Q178.9063,37.2344 177.5781,35.5938 Q176.2656,33.9375 176.2656,30.8125 Q176.2656,27.6875 177.5781,26.0313 Q178.9063,24.375 181.4063,24.375 Q182.1094,24.375 182.75,24.5313 Q183.4063,24.6875 183.9688,24.9844 L183.9688,27.7031 Q183.3438,27.125 182.75,26.8594 Q182.1563,26.5781 181.5313,26.5781 Q180.1875,26.5781 179.5,27.6563 Q178.8125,28.7188 178.8125,30.8125 Q178.8125,32.9063 179.5,33.9844 Q180.1875,35.0469 181.5313,35.0469 Q182.1563,35.0469 182.75,34.7813 Q183.3438,34.5 183.9688,33.9219 L183.9688,36.6406 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="84" x="195" y="35.8467">Formicarium</text><line style="stroke:#181818;stroke-width:0.5;" x1="167" x2="281" y1="47" y2="47"/><line style="stroke:#181818;stroke-width:0.5;" x1="167" x2="281" y1="55" y2="55"/></g><!--MD5=[e3c565211456ad2dabb0f70601bb8c20]
+class IEnvironment--><g id="elem_IEnvironment"><rect codeLine="6" fill="#F1F1F1" height="64.2969" id="IEnvironment" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="124" x="7" y="7"/><ellipse cx="22" cy="23" fill="#B4A7E5" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M17.9219,18.7656 L17.9219,16.6094 L25.3125,16.6094 L25.3125,18.7656 L22.8438,18.7656 L22.8438,26.8438 L25.3125,26.8438 L25.3125,29 L17.9219,29 L17.9219,26.8438 L20.3906,26.8438 L20.3906,18.7656 L17.9219,18.7656 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="92" x="36" y="27.8467">IEnvironment</text><line style="stroke:#181818;stroke-width:0.5;" x1="8" x2="130" y1="39" y2="39"/><line style="stroke:#181818;stroke-width:0.5;" x1="8" x2="130" y1="47" y2="47"/><ellipse cx="18" cy="60.6484" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="60" x="27" y="63.9951">Update()</text></g><!--MD5=[92c113296c939d034220e7092129d13f]
+class ICollider--><g id="elem_ICollider"><rect codeLine="10" fill="#F1F1F1" height="64.2969" id="ICollider" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="137" x="25.5" y="239"/><ellipse cx="63" cy="255" fill="#B4A7E5" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M58.9219,250.7656 L58.9219,248.6094 L66.3125,248.6094 L66.3125,250.7656 L63.8438,250.7656 L63.8438,258.8438 L66.3125,258.8438 L66.3125,261 L58.9219,261 L58.9219,258.8438 L61.3906,258.8438 L61.3906,250.7656 L58.9219,250.7656 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="55" x="82" y="259.8467">ICollider</text><line style="stroke:#181818;stroke-width:0.5;" x1="26.5" x2="161.5" y1="271" y2="271"/><line style="stroke:#181818;stroke-width:0.5;" x1="26.5" x2="161.5" y1="279" y2="279"/><ellipse cx="36.5" cy="292.6484" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="111" x="45.5" y="295.9951">CheckCollision()</text></g><!--MD5=[5d0a77e8f66918aa15fe0099dd6d4ba9]
+class Environment--><g id="elem_Environment"><rect codeLine="14" fill="#F1F1F1" height="48" id="Environment" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="119" x="18.5" y="131"/><ellipse cx="33.5" cy="147" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M36.4688,152.6406 Q35.8906,152.9375 35.25,153.0781 Q34.6094,153.2344 33.9063,153.2344 Q31.4063,153.2344 30.0781,151.5938 Q28.7656,149.9375 28.7656,146.8125 Q28.7656,143.6875 30.0781,142.0313 Q31.4063,140.375 33.9063,140.375 Q34.6094,140.375 35.25,140.5313 Q35.9063,140.6875 36.4688,140.9844 L36.4688,143.7031 Q35.8438,143.125 35.25,142.8594 Q34.6563,142.5781 34.0313,142.5781 Q32.6875,142.5781 32,143.6563 Q31.3125,144.7188 31.3125,146.8125 Q31.3125,148.9063 32,149.9844 Q32.6875,151.0469 34.0313,151.0469 Q34.6563,151.0469 35.25,150.7813 Q35.8438,150.5 36.4688,149.9219 L36.4688,152.6406 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="87" x="47.5" y="151.8467">Environment</text><line style="stroke:#181818;stroke-width:0.5;" x1="19.5" x2="136.5" y1="163" y2="163"/><line style="stroke:#181818;stroke-width:0.5;" x1="19.5" x2="136.5" y1="171" y2="171"/></g><!--MD5=[d9b4c0d58869fca5643125bc6b8755f9]
+class IRobot--><g id="elem_IRobot"><rect codeLine="18" fill="#F1F1F1" height="48" id="IRobot" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="78" x="317" y="15"/><ellipse cx="332" cy="31" fill="#B4A7E5" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M327.9219,26.7656 L327.9219,24.6094 L335.3125,24.6094 L335.3125,26.7656 L332.8438,26.7656 L332.8438,34.8438 L335.3125,34.8438 L335.3125,37 L327.9219,37 L327.9219,34.8438 L330.3906,34.8438 L330.3906,26.7656 L327.9219,26.7656 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="46" x="346" y="35.8467">IRobot</text><line style="stroke:#181818;stroke-width:0.5;" x1="318" x2="394" y1="47" y2="47"/><line style="stroke:#181818;stroke-width:0.5;" x1="318" x2="394" y1="55" y2="55"/></g><!--MD5=[47f8c12c154fd224940d273366471be1]
+class DiffRobot--><g id="elem_DiffRobot"><rect codeLine="22" fill="#F1F1F1" height="48" id="DiffRobot" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="96" x="292" y="131"/><ellipse cx="307" cy="147" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M309.9688,152.6406 Q309.3906,152.9375 308.75,153.0781 Q308.1094,153.2344 307.4063,153.2344 Q304.9063,153.2344 303.5781,151.5938 Q302.2656,149.9375 302.2656,146.8125 Q302.2656,143.6875 303.5781,142.0313 Q304.9063,140.375 307.4063,140.375 Q308.1094,140.375 308.75,140.5313 Q309.4063,140.6875 309.9688,140.9844 L309.9688,143.7031 Q309.3438,143.125 308.75,142.8594 Q308.1563,142.5781 307.5313,142.5781 Q306.1875,142.5781 305.5,143.6563 Q304.8125,144.7188 304.8125,146.8125 Q304.8125,148.9063 305.5,149.9844 Q306.1875,151.0469 307.5313,151.0469 Q308.1563,151.0469 308.75,150.7813 Q309.3438,150.5 309.9688,149.9219 L309.9688,152.6406 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="64" x="321" y="151.8467">DiffRobot</text><line style="stroke:#181818;stroke-width:0.5;" x1="293" x2="387" y1="163" y2="163"/><line style="stroke:#181818;stroke-width:0.5;" x1="293" x2="387" y1="171" y2="171"/></g><!--MD5=[fe384b9982c75cb43e7eb10d30a84407]
+class ILidar--><g id="elem_ILidar"><rect codeLine="26" fill="#F1F1F1" height="48" id="ILidar" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="69" x="291.5" y="247"/><ellipse cx="306.5" cy="263" fill="#B4A7E5" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M302.4219,258.7656 L302.4219,256.6094 L309.8125,256.6094 L309.8125,258.7656 L307.3438,258.7656 L307.3438,266.8438 L309.8125,266.8438 L309.8125,269 L302.4219,269 L302.4219,266.8438 L304.8906,266.8438 L304.8906,258.7656 L302.4219,258.7656 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="37" x="320.5" y="267.8467">ILidar</text><line style="stroke:#181818;stroke-width:0.5;" x1="292.5" x2="359.5" y1="279" y2="279"/><line style="stroke:#181818;stroke-width:0.5;" x1="292.5" x2="359.5" y1="287" y2="287"/></g><!--MD5=[3af379588d7ad870bb6c2f27215674c0]
+class Lidar--><g id="elem_Lidar"><rect codeLine="30" fill="#F1F1F1" height="48" id="Lidar" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="64" x="192" y="363"/><ellipse cx="207" cy="379" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M209.9688,384.6406 Q209.3906,384.9375 208.75,385.0781 Q208.1094,385.2344 207.4063,385.2344 Q204.9063,385.2344 203.5781,383.5938 Q202.2656,381.9375 202.2656,378.8125 Q202.2656,375.6875 203.5781,374.0313 Q204.9063,372.375 207.4063,372.375 Q208.1094,372.375 208.75,372.5313 Q209.4063,372.6875 209.9688,372.9844 L209.9688,375.7031 Q209.3438,375.125 208.75,374.8594 Q208.1563,374.5781 207.5313,374.5781 Q206.1875,374.5781 205.5,375.6563 Q204.8125,376.7188 204.8125,378.8125 Q204.8125,380.9063 205.5,381.9844 Q206.1875,383.0469 207.5313,383.0469 Q208.1563,383.0469 208.75,382.7813 Q209.3438,382.5 209.9688,381.9219 L209.9688,384.6406 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="32" x="221" y="383.8467">Lidar</text><line style="stroke:#181818;stroke-width:0.5;" x1="193" x2="255" y1="395" y2="395"/><line style="stroke:#181818;stroke-width:0.5;" x1="193" x2="255" y1="403" y2="403"/></g><!--MD5=[b3b4b50a34e0fab61a7405eafe05206c]
+reverse link IEnvironment to Environment--><g id="link_IEnvironment_Environment"><path codeLine="34" d="M73.05,91.35 C74.14,105.16 75.27,119.42 76.17,130.84 " fill="none" id="IEnvironment-backto-Environment" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="none" points="66.06,91.64,71.46,71.15,80.01,90.54,66.06,91.64" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[300a6d5d3b2209395902d90d489904a4]
+link Environment to ICollider--><g id="link_Environment_ICollider"><path codeLine="35" d="M81.24,179.07 C82.84,190.48 84.84,204.73 86.78,218.55 " fill="none" id="Environment-to-ICollider" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="none" points="93.77,217.98,89.61,238.75,79.9,219.92,93.77,217.98" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[90fd83f2c4b11a8ebe8e6f545fa57dac]
+link IEnvironment to Formicarium--><g id="link_IEnvironment_Formicarium"><path codeLine="36" d="M131.06,39 C138.32,39 145.58,39 152.84,39 " fill="none" id="IEnvironment-to-Formicarium" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="165.91,39,159.91,35,153.91,39,159.91,43,165.91,39" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[a4a3991221422a44e7ba514d5a939133]
+reverse link Formicarium to IRobot--><g id="link_Formicarium_IRobot"><path codeLine="37" d="M295.12,39 C302.41,39 309.69,39 316.98,39 " fill="none" id="Formicarium-backto-IRobot" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="282.01,39,288.01,43,294.01,39,288.01,35,282.01,39" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[1eb99f9a80f39fb58b68e38409559f30]
+link Formicarium to Lidar--><g id="link_Formicarium_Lidar"><path codeLine="39" d="M224,63.24 C224,124.67 224,291.2 224,357.86 " fill="none" id="Formicarium-to-Lidar" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="224,362.86,228,353.86,224,357.86,220,353.86,224,362.86" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[cf1fa9e861e28479da06316510f47d72]
+reverse link IRobot to DiffRobot--><g id="link_IRobot_DiffRobot"><path codeLine="41" d="M349.96,83.05 C347.67,99.33 345.16,117.22 343.23,130.96 " fill="none" id="IRobot-backto-DiffRobot" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="none" points="343.05,81.9,352.76,63.07,356.91,83.85,343.05,81.9" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[703454016a0d2f6c984de5126c0deab3]
+reverse link ILidar to Lidar--><g id="link_ILidar_Lidar"><path codeLine="42" d="M291.85,310.17 C276.19,327.66 258.15,347.83 244.61,362.96 " fill="none" id="ILidar-backto-Lidar" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="none" points="286.81,305.31,305.36,295.07,297.24,314.64,286.81,305.31" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[437fb88f96ecf57fb7f9801cdbb02cde]
+reverse link DiffRobot to ILidar--><g id="link_DiffRobot_ILidar"><path codeLine="43" d="M335.57,192.04 C333.37,210.01 330.76,231.21 328.83,246.96 " fill="none" id="DiffRobot-backto-ILidar" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="none" points="337.17,179.07,332.4679,184.5372,335.7059,190.9804,340.4081,185.5132,337.17,179.07" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[a89b5ee4e572d8f78565d78724fb5263]
+link ICollider to Lidar--><g id="link_ICollider_Lidar"><path codeLine="44" d="M129.52,303.15 C147.58,318.99 169.49,338.2 187.66,354.13 " fill="none" id="ICollider-to-Lidar" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="none" points="197.59,362.84,195.7172,355.8763,188.5689,354.9267,190.4417,361.8904,197.59,362.84" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[bbcb6b4eb5547e23e497c9629d64e1a6]
+@startuml
+
+class Formicarium{
+
+}
+
+interface IEnvironment{
+    +Update()
+}
+
+interface ICollider{
+    +CheckCollision()
+}
+
+class Environment{
+    
+}
+
+interface IRobot{
+
+}
+
+class DiffRobot{
+
+}
+
+interface ILidar{
+
+}
+
+class Lidar{
+
+}
+
+IEnvironment <|- - Environment
+ICollider <|-left- Environment
+Formicarium *-left- IEnvironment
+Formicarium *-right- IRobot 
+
+Formicarium ..> Lidar
+
+IRobot <|- - DiffRobot
+ILidar <|- - Lidar
+DiffRobot o- - ILidar
+Lidar o-left- ICollider
+
+
+
+@enduml
+
+PlantUML version 1.2022.7(Mon Aug 22 19:01:30 CEST 2022)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>

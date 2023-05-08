@@ -39,7 +39,11 @@ interface ILidar{
 }
 
 class Lidar{
+<<<<<<< HEAD
     +Lidar(collider:ICollider, range: float, xPos: float, yPos: float, scanPub: IPublisher)
+=======
+    +Lidar(collider: ICollider range: float, xPos: float, yPos: float, scanPub: IPublisher)
+>>>>>>> f48a11a (Classdiagram)
 }
 
 IEnvironment <|-- Environment
