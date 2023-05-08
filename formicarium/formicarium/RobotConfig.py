@@ -8,4 +8,3 @@ WheelBase = Width
 divisor = 3
 WheelDiameter = Height / divisor
 WheelRadius = WheelDiameter / 2
-
