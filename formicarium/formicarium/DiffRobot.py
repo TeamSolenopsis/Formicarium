@@ -86,8 +86,8 @@ class DiffRobot(IRobot):
         odom = Odometry()
         odom.header.frame_id = "odom"
         odom.child_frame_id = "base_link"
-        odom.pose.pose.position.x = float(self.x)
-        odom.pose.pose.position.y = float(self.y)
+        odom.pose.pose.position.x = float(self.x) / self.m2p
+        odom.pose.pose.position.y = float(self.y) / self.m2p
         odom.pose.pose.position.z = 0.0
         odom.pose.pose.orientation = self.euler_to_quaternion(self.theta * pi / 2)
         odom.twist.twist.linear = self.linear
@@ -98,7 +98,7 @@ class DiffRobot(IRobot):
     def PublishPose(self) -> None:
         pose = Pose()
         pose.position.x = float(self.x)
-        pose.position.y = float(self.y)
+        pose.position.y = float(self.y) 
         pose.position.z = 0.0
         pose.orientation = self.euler_to_quaternion(self.theta * pi / 2)
 
