@@ -27,12 +27,6 @@ class DiffRobot(IRobot):
         if wheelBase <= 0:
             raise ValueError("Wheel base is not positive")
 
-        if startX < 0:
-            raise ValueError("Start X is not positive")
-
-        if startY < 0:
-            raise ValueError("Start Y is not positive")
-
         self.lidar = lidar
         self.x = startX
         self.y = startY
