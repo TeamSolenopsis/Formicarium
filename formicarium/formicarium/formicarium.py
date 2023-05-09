@@ -20,6 +20,7 @@ class Formicarium(Node):
         self.environment_height = 800
         self.environment = Environment.Environment(self.environment_width, self.environment_height)
         self.subscribers = {}
+        self.odom_publishers = {}
         self.spawn_serv = self.create_service(Spawner, 'spawn', self.Spawn)
         self.timer = self.create_timer(1.0 / 30.0, self.Update)
 
@@ -29,15 +30,15 @@ class Formicarium(Node):
             response.error_message = f'Start position {request.x, request.y} is out of bounds for robot {request.robot_name}'
             return response
         
-        odomPub = self.create_publisher(Odometry, 'odom', 10)
         posePub = self.create_publisher(Pose, 'pose', 10)
         scanPub = self.create_publisher(Twist, 'scan', 10)
         lidar = Lidar.Lidar(self.environment, 500, request.x, request.y, scanPub)
         robot = DiffRobot.DiffRobot(RobotConfig.WheelRadius, RobotConfig.WheelBase,
-                                    request.x, request.y, odomPub, posePub, lidar, RobotConfig.image)
+                                    request.x, request.y, posePub, lidar, RobotConfig.image)
         self.environment.AddRobot(robot)
         self.subscribers[request.robot_name] = self.create_subscription(
             Twist, request.robot_name + '/cmd_vel', robot.CmdVelCallback, 10)
+        self.odom_publishers[request.robot_name] = self.create_publisher(Odometry, f'{request.robot_name}/odom', 10)
 
         response.robot_names = list(self.subscribers.keys())
         return response

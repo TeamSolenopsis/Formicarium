@@ -1,5 +1,4 @@
 @startuml
-
 class Formicarium{
 
 }
@@ -54,7 +53,5 @@ IRobot <|-right- DiffRobot
 ILidar <|-- Lidar
 DiffRobot o-- ILidar
 Lidar o-left- ICollider
-
-
 
 @enduml

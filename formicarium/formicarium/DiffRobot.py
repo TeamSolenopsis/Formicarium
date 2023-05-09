@@ -6,16 +6,11 @@ from math import sin, cos, pi, degrees
 from geometry_msgs.msg import Twist
 from pygame import sprite
 
-
-
 class DiffRobot(IRobot, sprite.Sprite):
     def __init__(self, wheelRadius: float, wheelBase: float, startX: float, startY: float,
-                 odomPublisher: IPublisher, posePublisher: IPublisher, lidar: ILidar, img: image) -> None:
+                 posePublisher: IPublisher, lidar: ILidar, img: image) -> None:
         super().__init__()
         sprite.Sprite.__init__(self)
-
-        if odomPublisher is None:
-            raise ValueError("OdomPublisher is not set")
 
         if posePublisher is None:
             raise ValueError("PosePublisher is not set")
@@ -32,7 +27,6 @@ class DiffRobot(IRobot, sprite.Sprite):
         self.lidar = lidar
         self.x = startX
         self.y = startY
-        self.odomPublisher = odomPublisher
         self.posePublisher = posePublisher
         self.theta = 0
         self.m2p = 3779.5275590551
@@ -46,6 +40,8 @@ class DiffRobot(IRobot, sprite.Sprite):
         self.previousTime = time.get_ticks()
         self.vel_l = 0
         self.vel_r = 0
+        self.linear = Vector3()
+        self.angular = Vector3()
 
     def update(self, screen:Surface) -> None:
         self.Move()
@@ -55,9 +51,11 @@ class DiffRobot(IRobot, sprite.Sprite):
     def CmdVelCallback(self, msg: Twist) -> None:
         if msg is None:
             raise ValueError("Message is not set")
+        self.linear = msg.linear
+        self.angular = msg.angular
 
-        v = msg.linear.x * self.m2p
-        w = msg.angular.z * (self.m2p / self.wheelBase)
+        v = self.linear.x * self.m2p
+        w = self.angular.z * (self.m2p / self.wheelBase)
         L = self.wheelBase
         r = self.wheelRadius
         self.vel_l = ((v - w * (L / 2)) / r)
@@ -69,8 +67,7 @@ class DiffRobot(IRobot, sprite.Sprite):
 
         self.theta += (self.vel_r - self.vel_l) / self.wheelBase * deltaTime
         self.x += ((self.vel_l + self.vel_r) / 2) * cos(self.theta) * deltaTime
-        self.y -= ((self.vel_l + self.vel_r) / 2) * sin(self.theta) * deltaTime
-        
+        self.y -= ((self.vel_l + self.vel_r) / 2) * sin(self.theta) * deltaTime  
         self.image = transform.rotate(self.robot_original, degrees(self.theta) % 360)
         self.rect = self.image.get_rect(center=(self.x, self.y))
         self.rect.center = (self.x, self.y)
@@ -83,24 +80,24 @@ class DiffRobot(IRobot, sprite.Sprite):
         qw = cos(yaw/2)
         return Quaternion(x=qx, y=qy, z=qz, w=qw)
 
-    def PublishOdometry(self) -> None:
+    def get_odometry(self) -> Odometry:
         odom = Odometry()
         odom.header.frame_id = "odom"
         odom.child_frame_id = "base_link"
-        odom.pose.pose.position.x = float(self.x)
-        odom.pose.pose.position.y = float(self.y)
+        odom.pose.pose.position.x = float(self.x) / self.m2p
+        odom.pose.pose.position.y = float(self.y) / self.m2p
         odom.pose.pose.position.z = 0.0
         odom.pose.pose.orientation = self.euler_to_quaternion(self.theta * pi / 2)
-        odom.twist.twist.linear = Vector3()
-        odom.twist.twist.angular = Vector3()
+        odom.twist.twist.linear = self.linear
+        odom.twist.twist.angular = self.angular
 
-        self.odomPublisher.Publish(odom)
+        return odom
 
     def PublishPose(self) -> None:
         pose = Pose()
         pose.position.x = float(self.x)
-        pose.position.y = float(self.y)
+        pose.position.y = float(self.y) 
         pose.position.z = 0.0
         pose.orientation = self.euler_to_quaternion(self.theta * pi / 2)
 
-        self.posePublisher.Publish(pose)
+        self.posePublisher.publish(pose)
