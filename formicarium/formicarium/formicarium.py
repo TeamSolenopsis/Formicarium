@@ -26,7 +26,7 @@ class Formicarium(Node):
 
         #This should be moved to a spawn_obstacle function and called with a service command
         #Parameter is a position and dimension tuple
-        self.environment.add_obstacle((300, 300,300,300))
+        self.environment.add_obstacle((300, 300, 300, 300))
 
     def Spawn(self, request, response):
         if not self.validate_spawn_pose(request.x, request.y):
@@ -58,7 +58,7 @@ class Formicarium(Node):
     
 def main(args=None):
     rclpy.init(args=args)
-    
+
     formicarium = Formicarium()
 
     rclpy.spin(formicarium)
