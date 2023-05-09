@@ -2,6 +2,8 @@ from formicarium.Interfaces import ILidar, IPublisher, ICollider
 from pygame import Surface, draw, Color
 import numpy as np
 import math
+from sensor_msgs.msg import LaserScan
+
 
 
 class Lidar(ILidar):
@@ -21,7 +23,7 @@ class Lidar(ILidar):
         self.white = Color(255, 255, 255)
         self.red = Color(255, 0, 0)
 
-    def Scan(self, map: Surface) -> list[int, int]:
+    def Scan(self, map: Surface) -> LaserScan:
         if map is None:
             raise ValueError("map cannot be None")
 
@@ -46,7 +48,23 @@ class Lidar(ILidar):
             if (i != 99):
                 draw.line(map, self.red, (x_0, y_0), (x_t, y_t))
 
-        return data
+        msg = LaserScan()
+        #msg.header.stamp = get_clock().now().to_msg()
+        msg.header.frame_id = "laser"
+        msg.angle_min = float(0)
+        msg.angle_max = float(2*math.pi)
+        msg.angle_increment = float(2*math.pi / 60)
+        msg.time_increment = float(0)
+        msg.scan_time = float(0)
+        msg.range_min = float(0)
+        msg.range_max = float(self.range)
+        msg.ranges = []
+        msg.intensities = []
+        for point in data:
+            msg.ranges.append(math.sqrt((point[0] - x_0)**2 + (point[1] - y_0)**2))
+            msg.intensities.append(0)
+
+        return msg
 
     def SetPosition(self, x: float, y: float) -> tuple[float, float]:
         self.position = (x, y)
