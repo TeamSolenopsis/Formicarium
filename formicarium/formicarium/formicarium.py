@@ -24,7 +24,7 @@ class Formicarium(Node):
         self.odom_publishers = {}
         self.spawn_serv = self.create_service(Spawner, 'spawn', self.Spawn)
         self.timer = self.create_timer(1.0 / 30.0, self.Update)
-        self.environment.add_obstacle((0, 0, 255), (300, 300,300,300), 20)
+        self.environment.add_obstacle((300, 300,300,300))
 
     def Spawn(self, request, response):
         if not self.validate_spawn_pose(request.x, request.y):
@@ -38,6 +38,7 @@ class Formicarium(Node):
         robot = DiffRobot.DiffRobot(RobotConfig.WheelRadius, RobotConfig.WheelBase,
                                     request.x, request.y, posePub, lidar, RobotConfig.image, self.environment)
         self.environment.AddRobot(robot)
+        self.robots[request.robot_name] = robot
         self.subscribers[request.robot_name] = self.create_subscription(
             Twist, request.robot_name + '/cmd_vel', robot.CmdVelCallback, 10)
         self.odom_publishers[request.robot_name] = self.create_publisher(Odometry, f'{request.robot_name}/odom', 10)
@@ -48,6 +49,8 @@ class Formicarium(Node):
 
     def Update(self):
         self.environment.Update()
+        for key, robot in self.robots.items():
+            self.odom_publishers[key].publish(robot.get_odometry())
 
     def validate_spawn_pose(self, x:float, y:float):
         return RobotConfig.Width / 2 < x and x < (self.environment_width - (RobotConfig.Width / 2)) and RobotConfig.Height / 2 < y and y < (self.environment_height - (RobotConfig.Height / 2))
