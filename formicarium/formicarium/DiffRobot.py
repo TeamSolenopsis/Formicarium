@@ -9,7 +9,7 @@ from rclpy.node import Node
 
 
 class DiffRobot(IRobot, sprite.Sprite):
-    def __init__(self,name:str, wheelRadius: float, wheelBase: float, startX: float, startY: float,
+    def __init__(self,name:str, wheel_radius: float, wheel_base: float, start_x: float, start_y: float,
                  lidar: ILidar, img: image, collider:ICollider, node:Node) -> None:
         super().__init__()
         sprite.Sprite.__init__(self)
@@ -20,10 +20,10 @@ class DiffRobot(IRobot, sprite.Sprite):
         if lidar is None:
             raise ValueError("Lidar is not set")
 
-        if wheelRadius <= 0:
+        if wheel_radius <= 0:
             raise ValueError("Wheel radius is not positive")
 
-        if wheelBase <= 0:
+        if wheel_base <= 0:
             raise ValueError("Wheel base is not positive")
         
         if name is None or name == '':
@@ -32,8 +32,8 @@ class DiffRobot(IRobot, sprite.Sprite):
         self.name = name
         self.lidar = lidar
         self.collider = collider
-        self.x = startX
-        self.y = startY
+        self.x = start_x
+        self.y = start_y
         self.node = node
         self.theta = 0
         self.m2p = 3779.5275590551
@@ -41,10 +41,10 @@ class DiffRobot(IRobot, sprite.Sprite):
         self.image = transform.scale(self.image, (80, 81))
         self.image = transform.rotate(self.image, -90)
         self.robot_original = self.image
-        self.wheelBase = wheelBase
-        self.wheelRadius = wheelRadius
+        self.wheel_base = wheel_base
+        self.wheel_radius = wheel_radius
         self.rect = self.image.get_rect(center=(self.x, self.y))
-        self.previousTime = time.get_ticks()
+        self.previous_time = time.get_ticks()
         self.vel_l = 0
         self.vel_r = 0
         self.linear = Vector3()
@@ -70,19 +70,19 @@ class DiffRobot(IRobot, sprite.Sprite):
         self.angular = msg.angular
 
         v = self.linear.x * self.m2p
-        w = self.angular.z * (self.m2p / self.wheelBase)
-        L = self.wheelBase
-        r = self.wheelRadius
+        w = self.angular.z * (self.m2p / self.wheel_base)
+        L = self.wheel_base
+        r = self.wheel_radius
         self.vel_l = ((v - w * (L / 2)) / r)
         self.vel_r = ((v + w * (L / 2)) / r)
 
     def move(self) -> None:
-        deltaTime = (time.get_ticks() - self.previousTime) / 1000
-        self.previousTime = time.get_ticks()
+        delta_time = (time.get_ticks() - self.previous_time) / 1000
+        self.previous_time = time.get_ticks()
 
-        self.theta += (self.vel_r - self.vel_l) / self.wheelBase * deltaTime
-        self.x += ((self.vel_l + self.vel_r) / 2) * cos(self.theta) * deltaTime
-        self.y -= ((self.vel_l + self.vel_r) / 2) * sin(self.theta) * deltaTime  
+        self.theta += (self.vel_r - self.vel_l) / self.wheel_base * delta_time
+        self.x += ((self.vel_l + self.vel_r) / 2) * cos(self.theta) * delta_time
+        self.y -= ((self.vel_l + self.vel_r) / 2) * sin(self.theta) * delta_time  
         self.image = transform.rotate(self.robot_original, degrees(self.theta) % 360)
         self.rect = self.image.get_rect(center=(self.x, self.y))
         self.rect.center = (self.x, self.y)
