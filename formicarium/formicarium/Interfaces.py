@@ -53,6 +53,10 @@ class IEnvironment(abc.ABC):
     def AddRobot(self, robot: IRobot) -> None:
         pass
 
+    @abc.abstractmethod
+    def add_obstacle(self, obstacle) -> None:
+        pass
+
 class ICollider(abc.ABC):
     @abc.abstractmethod
     def check_collision_lidar(self, x: float, y: float) -> bool:

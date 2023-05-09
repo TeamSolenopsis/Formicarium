@@ -23,6 +23,7 @@ class Formicarium(Node):
         self.odom_publishers = {}
         self.spawn_serv = self.create_service(Spawner, 'spawn', self.Spawn)
         self.timer = self.create_timer(1.0 / 30.0, self.Update)
+        self.environment.add_obstacle((0, 0, 255), (300, 300,300,300), 20)
 
     def Spawn(self, request, response):
         if not self.validate_spawn_pose(request.x, request.y):
@@ -42,6 +43,7 @@ class Formicarium(Node):
 
         response.robot_names = list(self.subscribers.keys())
         return response
+    
 
     def Update(self):
         self.environment.Update()
