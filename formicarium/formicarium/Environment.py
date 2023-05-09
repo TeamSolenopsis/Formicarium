@@ -1,6 +1,7 @@
 from formicarium.Interfaces import IEnvironment, ICollider, IRobot
 import pygame
-
+from pygame import sprite
+from geometry_msgs.msg import Twist
 
 class Environment(IEnvironment, ICollider):
     def __init__(self, width: float, height: float) -> None:
@@ -26,7 +27,7 @@ class Environment(IEnvironment, ICollider):
     def AddRobot(self, robot: IRobot) -> None:
         self.robot_group.add(robot)
 
-    def CheckCollision(self, x: float, y: float) -> bool:
+    def check_collision_lidar(self, x: float, y: float) -> bool:
         #check collision with sprite
         for robot in self.robot_group:
             if robot.rect.collidepoint(x, y):
@@ -34,5 +35,12 @@ class Environment(IEnvironment, ICollider):
             
         if self.screen.get_at((x,y)) != self.color_background and self.screen.get_at((x,y)) != self.color_laser:
             return True
-        
+
         return False
+    
+    def check_collision_robot(self, robot:IRobot) -> bool:
+        _robot_group = self.robot_group.copy()
+        _robot_group.remove(robot)
+        if pygame.sprite.spritecollideany(robot, _robot_group or []):
+            robot.stop()
+    

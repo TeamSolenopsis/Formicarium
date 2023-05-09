@@ -34,7 +34,7 @@ class Formicarium(Node):
         scanPub = self.create_publisher(Twist, 'scan', 10)
         lidar = Lidar.Lidar(self.environment, 500, request.x, request.y, scanPub)
         robot = DiffRobot.DiffRobot(RobotConfig.WheelRadius, RobotConfig.WheelBase,
-                                    request.x, request.y, posePub, lidar, RobotConfig.image)
+                                    request.x, request.y, posePub, lidar, RobotConfig.image, self.environment)
         self.environment.AddRobot(robot)
         self.subscribers[request.robot_name] = self.create_subscription(
             Twist, request.robot_name + '/cmd_vel', robot.CmdVelCallback, 10)
