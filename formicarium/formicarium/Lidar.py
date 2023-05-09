@@ -3,7 +3,6 @@ from pygame import Surface, draw, Color
 import numpy as np
 import math
 
-
 class Lidar(ILidar):
     def __init__(self, collider:ICollider, range: float, xPos: float, yPos: float, scanPub: IPublisher) -> None:
         super().__init__()
@@ -39,7 +38,7 @@ class Lidar(ILidar):
                 if not (0 <= x_t < map.get_width() and 0 <= y_t < map.get_height()):
                     continue
 
-                if self.collider.CheckCollision(x_t, y_t):
+                if self.collider.check_collision_lidar(x_t, y_t):
                     data.append((x_t, y_t))
                     break
 
