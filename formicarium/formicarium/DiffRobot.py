@@ -48,7 +48,8 @@ class DiffRobot(IRobot, sprite.Sprite):
         self.Move()
         self.lidar.SetPosition(self.x, self.y)
         self.lidar.Scan(screen)
-        self.collider.check_collision_robot(self)
+        if self.collider.check_collision_robot(self):
+            self.stop()
 
     def CmdVelCallback(self, msg: Twist) -> None:
         if msg is None:

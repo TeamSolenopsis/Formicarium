@@ -42,5 +42,6 @@ class Environment(IEnvironment, ICollider):
         _robot_group = self.robot_group.copy()
         _robot_group.remove(robot)
         if pygame.sprite.spritecollideany(robot, _robot_group or []):
-            robot.stop()
+            return True
     
+        return False
