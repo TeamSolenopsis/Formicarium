@@ -3,6 +3,7 @@ from pygame import Surface, draw, Color
 import numpy as np
 import math
 from sensor_msgs.msg import LaserScan
+from rclpy.node import Node
 
 class Lidar(ILidar):
     def __init__(self, collider:ICollider, range: float, xPos: float, yPos: float) -> None:
@@ -17,7 +18,7 @@ class Lidar(ILidar):
         self.white = Color(255, 255, 255)
         self.red = Color(255, 0, 0)
 
-    def scan(self, map: Surface) -> LaserScan:
+    def scan(self, map: Surface, node:Node) -> LaserScan:
         if map is None:
             raise ValueError("map cannot be None")
 
@@ -43,7 +44,7 @@ class Lidar(ILidar):
                 draw.line(map, self.red, (x_0, y_0), (x_t, y_t))
 
         msg = LaserScan()
-        #msg.header.stamp = get_clock().now().to_msg()
+        msg.header.stamp = node.get_clock().now().to_msg()
         msg.header.frame_id = "laser"
         msg.angle_min = float(0)
         msg.angle_max = float(2*math.pi)
