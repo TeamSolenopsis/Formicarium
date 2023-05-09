@@ -58,6 +58,7 @@ class Formicarium(Node):
     
 def main(args=None):
     rclpy.init(args=args)
+    
     formicarium = Formicarium()
 
     rclpy.spin(formicarium)
