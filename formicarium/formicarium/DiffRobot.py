@@ -93,10 +93,10 @@ class DiffRobot(IRobot, sprite.Sprite):
 
         return odom
 
-    def PublishPose(self) -> None:
+    def publish_pose(self) -> None:
         pose = Pose()
-        pose.position.x = float(self.x)
-        pose.position.y = float(self.y) 
+        pose.position.x = float(self.x) / self.m2p
+        pose.position.y = float(self.y) / self.m2p
         pose.position.z = 0.0
         pose.orientation = self.euler_to_quaternion(self.theta * pi / 2)
 
