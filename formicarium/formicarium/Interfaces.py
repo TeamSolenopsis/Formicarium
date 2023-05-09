@@ -10,11 +10,11 @@ class IRobot(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def CmdVelCallback(self, msg: Twist) -> None:
+    def cmd_vel_callback(self, msg: Twist) -> None:
         pass
 
     @abc.abstractmethod
-    def Move(self) -> None:
+    def move(self) -> None:
         pass
     
     @abc.abstractmethod
@@ -22,39 +22,35 @@ class IRobot(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def get_odometry(self) -> Odometry:
+    def publish_odom(self) -> Odometry:
         pass
 
     @abc.abstractmethod
-    def PublishPose(self) -> None:
+    def publish_pose(self) -> None:
         pass
 
 class ILidar(abc.ABC):
     @abc.abstractmethod
-    def Scan(self, map: Surface) -> None:
+    def scan(self, map: Surface) -> None:
         pass
 
     @abc.abstractmethod
-    def SetPosition(self, x: float, y: float) -> None:
+    def set_position(self, x: float, y: float) -> None:
         pass
-
-
-class IPublisher(abc.ABC):
-    @abc.abstractmethod
-    def Publish(self, data) -> None:
-        pass
-
 
 class IEnvironment(abc.ABC):
     @abc.abstractmethod
-    def Update(self) -> Surface:
+    def update(self) -> Surface:
         pass
 
-    def AddRobot(self, robot: IRobot) -> None:
+    def add_robot(self, robot: IRobot) -> None:
         pass
 
     @abc.abstractmethod
     def add_obstacle(self, obstacle) -> None:
+        pass
+
+    def get_robot_names(self) -> list:
         pass
 
 class ICollider(abc.ABC):

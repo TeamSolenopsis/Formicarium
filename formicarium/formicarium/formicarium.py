@@ -18,40 +18,28 @@ class Formicarium(Node):
         self.environment_width = 1200
         self.environment_height = 800
         self.environment = Environment.Environment(self.environment_width, self.environment_height)
-        self.subscribers = {}
-        self.robots = {}
-        self.odom_publishers = {}
-        self.spawn_serv = self.create_service(Spawner, 'spawn', self.Spawn)
-        self.timer = self.create_timer(1.0 / 30.0, self.Update)
+        self.spawn_serv = self.create_service(Spawner, 'spawn', self.spawn)
+        self.timer = self.create_timer(1.0 / 30.0, self.update)
 
-        #This should be moved to a spawn_obstacle function and called with a service command
+        #TODO This should be moved to a spawn_obstacle function and called with a service command
         #Parameter is a position and dimension tuple
         self.environment.add_obstacle((300, 300, 300, 300))
 
-    def Spawn(self, request, response):
-        if not self.validate_spawn_pose(request.x, request.y):
-            response.robot_names = list(self.subscribers.keys()) 
+    def spawn(self, request, response):
+        response.robot_names = self.environment.get_robot_names()
+
+        if not self.validate_spawn_pose(request.x, request.y) or request.robot_name in response.robot_names:
             response.error_message = f'Start position {request.x, request.y} is out of bounds for robot {request.robot_name}'
             return response
         
-        posePub = self.create_publisher(Pose, 'pose', 10)
-        scanPub = self.create_publisher(Twist, 'scan', 10)
-        lidar = Lidar.Lidar(self.environment, 500, request.x, request.y, scanPub)
-        robot = DiffRobot.DiffRobot(RobotConfig.WheelRadius, RobotConfig.WheelBase,
-                                    request.x, request.y, posePub, lidar, RobotConfig.image, self.environment)
-        self.environment.AddRobot(robot)
-        self.robots[request.robot_name] = robot
-        self.subscribers[request.robot_name] = self.create_subscription(
-            Twist, request.robot_name + '/cmd_vel', robot.CmdVelCallback, 10)
-        self.odom_publishers[request.robot_name] = self.create_publisher(Odometry, f'{request.robot_name}/odom', 10)
-
-        response.robot_names = list(self.subscribers.keys())
+        lidar = Lidar.Lidar(self.environment, 500, request.x, request.y)
+        robot = DiffRobot.DiffRobot(request.robot_name ,RobotConfig.WheelRadius, RobotConfig.WheelBase,
+                                    request.x, request.y, lidar, RobotConfig.image, self.environment, self)
+        self.environment.add_robot(robot)
         return response
 
-    def Update(self):
-        self.environment.Update()
-        for key, robot in self.robots.items():           
-            self.odom_publishers[key].publish(robot.get_odometry())
+    def update(self):
+        self.environment.update()
 
     def validate_spawn_pose(self, x:float, y:float):
         return RobotConfig.Width / 2 < x and x < (self.environment_width - (RobotConfig.Width / 2)) and RobotConfig.Height / 2 < y and y < (self.environment_height - (RobotConfig.Height / 2))
