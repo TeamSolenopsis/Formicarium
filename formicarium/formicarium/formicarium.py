@@ -49,7 +49,7 @@ class Formicarium(Node):
 
     def Update(self):
         self.environment.Update()
-        for key, robot in self.robots.items():
+        for key, robot in self.robots.items():           
             self.odom_publishers[key].publish(robot.get_odometry())
 
     def validate_spawn_pose(self, x:float, y:float):
