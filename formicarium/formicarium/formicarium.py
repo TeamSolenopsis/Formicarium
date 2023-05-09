@@ -20,6 +20,7 @@ class Formicarium(Node):
         self.environment_height = 800
         self.environment = Environment.Environment(self.environment_width, self.environment_height)
         self.subscribers = {}
+        self.robots = {}
         self.odom_publishers = {}
         self.spawn_serv = self.create_service(Spawner, 'spawn', self.Spawn)
         self.timer = self.create_timer(1.0 / 30.0, self.Update)
