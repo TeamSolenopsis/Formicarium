@@ -24,7 +24,7 @@ class Environment(IEnvironment, ICollider):
         self.screen.fill(self.color_background)
         pygame.draw.rect(self.screen, (0, 0, 255), pygame.Rect(0, 0, 1200, 1200), width=20)
         for obstacle in self.obstacle_group:
-            pygame.draw.rect(self.screen, (0,0,255),obstacle, width=20)
+            pygame.draw.rect(self.screen, (0,0,255), obstacle, width=20)
         
     def AddRobot(self, robot: IRobot) -> None:
         self.robot_group.add(robot)
