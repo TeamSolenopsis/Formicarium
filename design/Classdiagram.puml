@@ -1,63 +1,57 @@
 @startuml
-!define datatype(x) class x << (D,#FF7700) DataType>>
-datatype(Position) {
-  float x
-  float y
-}
+class Formicarium{
 
-!define datatype(x) class x << (D,#FF7700) DataType>>
-datatype(RobotConfig) {
-    float wheelRadius
-    float wheelBase
-    Position startPose
-    Publisher odom_pub
-}
-
-!define datatype(x) class x << (D,#FF7700) DataType>>
-datatype(LidarConfig) {
-    float range
-    Position position
-    Publisher scan_pub
-}
-
-class SimManager{
-    SimManager(IRobot& robot, IEnvironment& env);
-}
-
-interface IRobot{
-    void Draw(Surface& map);
-    void Move(float leftVelocity, float rightVelocity, float deltaTime);
-    void PublishOdom(Publisher& publisher);
-}
-
-class DiffRobot {
-    DiffRobot(RobotConfig config, ILidar& lidar);
-}
-
-interface ILidar{
-    void Scan(Surface& env, Publisher& publisher);
-    void SetPosition(Position position);
-}
-
-class Lidar {
-    Lidar(LidarConfig config);
 }
 
 interface IEnvironment{
-    const Sufrface& GetMap();
+    +Update()
 }
 
-class Environment {
-    Environment(float width, float height);
+interface ICollider{
+    +CheckCollision()
 }
 
-SimManager o-- IRobot
-SimManager o-- IEnvironment
-IEnvironment <|.. Environment
-IRobot <|.. DiffRobot
+class Environment{
+    +Environment(width: float, height: float)
+}
+
+interface IPublisher{
+    +Publish(self, data)
+}
+
+interface IRobot{
+    +Draw()
+    +PublishOdometry()
+    +PublishPose()
+    +CmdVelCallback()
+    +Move()
+}
+
+class DiffRobot{
+    +DiffRobot(wheelRadius: float, wheelBase: float, startX: float, startY: float,
+                 odomPublisher: IPublisher, posePublisher: IPublisher, lidar: ILidar, img: image)
+}
+
+interface ILidar{
+    +Scan(map: Surface)
+    +SetPosition(x: float, y: float)
+}
+
+class Lidar{
+    +Lidar(collider:ICollider, range: float, xPos: float, yPos: float, scanPub: IPublisher)
+}
+
+IEnvironment <|-- Environment
+ICollider <|-left- Environment
+Formicarium *-left- IEnvironment
+Environment o-right- IRobot 
+
+Formicarium ..> Lidar
+Formicarium ..> DiffRobot
+
+IRobot <|-right- DiffRobot
+ILidar <|-- Lidar
 DiffRobot o-- ILidar
-ILidar <|.. Lidar
-
-
+Lidar o-left- ICollider
 
 @enduml

@@ -5,7 +5,7 @@ from nav_msgs.msg import Odometry
 
 class IRobot(abc.ABC):
     @abc.abstractmethod
-    def Draw(self, map: Surface) -> None:
+    def update(self, map: Surface) -> None:
         pass
 
     @abc.abstractmethod
@@ -23,7 +23,6 @@ class IRobot(abc.ABC):
     @abc.abstractmethod
     def PublishPose(self) -> None:
         pass
-
 
 class ILidar(abc.ABC):
     @abc.abstractmethod
@@ -43,5 +42,13 @@ class IPublisher(abc.ABC):
 
 class IEnvironment(abc.ABC):
     @abc.abstractmethod
-    def GetMap(self) -> Surface:
+    def Update(self) -> Surface:
+        pass
+
+    def AddRobot(self, robot: IRobot) -> None:
+        pass
+
+class ICollider(abc.ABC):
+    @abc.abstractmethod
+    def CheckCollision(self, x: float, y: float) -> bool:
         pass
