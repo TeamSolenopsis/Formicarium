@@ -28,7 +28,7 @@ class Formicarium(Node):
     def spawn(self, request, response):
         response.robot_names = self.environment.get_robot_names()
 
-        if not self.validate_spawn_pose(request.x, request.y):
+        if not self.validate_spawn_pose(request.x, request.y) or request.robot_name in response.robot_names:
             response.error_message = f'Start position {request.x, request.y} is out of bounds for robot {request.robot_name}'
             return response
         
