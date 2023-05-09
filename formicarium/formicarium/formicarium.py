@@ -11,7 +11,6 @@ import formicarium.RobotConfig as RobotConfig
 import formicarium.Environment as Environment
 from formicarium_interfaces.srv import Spawner
 
-
 class Formicarium(Node):
     def __init__(self):
         super().__init__('sim_formicarium')
