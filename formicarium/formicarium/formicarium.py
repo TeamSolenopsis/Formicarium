@@ -26,6 +26,7 @@ class Formicarium(Node):
         self.timer = self.create_timer(1.0 / 30.0, self.Update)
 
         #This should be moved to a spawn_obstacle function and called with a service command
+        #Parameter is a position and dimension tuple
         self.environment.add_obstacle((300, 300,300,300))
 
     def Spawn(self, request, response):
