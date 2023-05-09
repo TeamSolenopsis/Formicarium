@@ -47,7 +47,6 @@ class Formicarium(Node):
 
         response.robot_names = list(self.subscribers.keys())
         return response
-    
 
     def Update(self):
         self.environment.Update()
