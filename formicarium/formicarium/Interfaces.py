@@ -21,7 +21,7 @@ class IRobot(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def PublishPose(self) -> None:
+    def publish_pose(self) -> None:
         pass
 
 class ILidar(abc.ABC):

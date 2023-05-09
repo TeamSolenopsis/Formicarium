@@ -8,11 +8,11 @@ from pygame import sprite
 
 class DiffRobot(IRobot, sprite.Sprite):
     def __init__(self, wheelRadius: float, wheelBase: float, startX: float, startY: float,
-                 posePublisher: IPublisher, lidar: ILidar, img: image) -> None:
+                 pose_publisher: IPublisher, lidar: ILidar, img: image) -> None:
         super().__init__()
         sprite.Sprite.__init__(self)
 
-        if posePublisher is None:
+        if pose_publisher is None:
             raise ValueError("PosePublisher is not set")
 
         if lidar is None:
@@ -27,7 +27,7 @@ class DiffRobot(IRobot, sprite.Sprite):
         self.lidar = lidar
         self.x = startX
         self.y = startY
-        self.posePublisher = posePublisher
+        self.posePublisher = pose_publisher
         self.theta = 0
         self.m2p = 3779.5275590551
         self.image = img

@@ -4,5 +4,23 @@
     ],
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,
-    "cmake.sourceDirectory": "/home/mart/Documents/formicarium_ws/src/Formicarium/formicarium_interfaces"
+    "cmake.sourceDirectory": "/home/mart/Documents/formicarium_ws/src/Formicarium/formicarium_interfaces",
+    "python.autoComplete.extraPaths": [
+        "/home/sara/install/minorturtleros/local/lib/python3.10/dist-packages",
+        "/home/sara/install/communicationarduino/lib/python3.10/site-packages",
+        "/home/sara/turtlerobot_ws/install/communicationarduino/lib/python3.10/site-packages",
+        "/home/sara/turtlerobot_ws/install/CommunicationArduino/lib/python3.10/site-packages",
+        "/home/sara/ws_turlerobot/install/minorturtleros/local/lib/python3.10/dist-packages",
+        "/opt/ros/humble/lib/python3.10/site-packages",
+        "/opt/ros/humble/local/lib/python3.10/dist-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "/home/sara/install/minorturtleros/local/lib/python3.10/dist-packages",
+        "/home/sara/install/communicationarduino/lib/python3.10/site-packages",
+        "/home/sara/turtlerobot_ws/install/communicationarduino/lib/python3.10/site-packages",
+        "/home/sara/turtlerobot_ws/install/CommunicationArduino/lib/python3.10/site-packages",
+        "/home/sara/ws_turlerobot/install/minorturtleros/local/lib/python3.10/dist-packages",
+        "/opt/ros/humble/lib/python3.10/site-packages",
+        "/opt/ros/humble/local/lib/python3.10/dist-packages"
+    ]
 }
