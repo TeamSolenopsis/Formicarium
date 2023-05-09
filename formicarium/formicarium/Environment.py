@@ -22,7 +22,7 @@ class Environment(IEnvironment, ICollider):
         pygame.display.update()
         
         self.screen.fill(self.color_background)
-        pygame.draw.rect(self.screen, (0, 0, 255), pygame.Rect(0, 0, 1200, 1200), width=20)
+        pygame.draw.rect(self.screen, (0, 0, 255), pygame.Rect(0, 0, self.width, self.height), width=20)
         for obstacle in self.obstacle_group:
             pygame.draw.rect(self.screen, (0,0,255), obstacle, width=20)
         
