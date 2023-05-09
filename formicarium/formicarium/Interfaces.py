@@ -2,6 +2,7 @@ import abc
 from pygame import Surface
 from geometry_msgs.msg import Twist
 from nav_msgs.msg import Odometry
+from pygame import sprite
 
 class IRobot(abc.ABC):
     @abc.abstractmethod
@@ -14,6 +15,10 @@ class IRobot(abc.ABC):
 
     @abc.abstractmethod
     def Move(self) -> None:
+        pass
+    
+    @abc.abstractmethod
+    def stop(self) -> None:
         pass
 
     @abc.abstractmethod
@@ -48,7 +53,15 @@ class IEnvironment(abc.ABC):
     def AddRobot(self, robot: IRobot) -> None:
         pass
 
+    @abc.abstractmethod
+    def add_obstacle(self, obstacle) -> None:
+        pass
+
 class ICollider(abc.ABC):
     @abc.abstractmethod
-    def CheckCollision(self, x: float, y: float) -> bool:
+    def check_collision_lidar(self, x: float, y: float) -> bool:
+        pass
+
+    @abc.abstractmethod
+    def check_collision_robot(robot:sprite.Sprite) -> bool:
         pass

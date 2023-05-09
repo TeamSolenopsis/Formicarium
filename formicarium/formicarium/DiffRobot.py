@@ -1,4 +1,4 @@
-from formicarium.Interfaces import IPublisher, ILidar, IRobot
+from formicarium.Interfaces import IPublisher, ILidar, IRobot, ICollider
 from pygame import Surface, transform, image, time
 from geometry_msgs.msg import Pose, Quaternion, Vector3
 from nav_msgs.msg import Odometry
@@ -8,7 +8,7 @@ from pygame import sprite
 
 class DiffRobot(IRobot, sprite.Sprite):
     def __init__(self, wheelRadius: float, wheelBase: float, startX: float, startY: float,
-                 posePublisher: IPublisher, lidar: ILidar, img: image) -> None:
+                 posePublisher: IPublisher, lidar: ILidar, img: image, collider:ICollider) -> None:
         super().__init__()
         sprite.Sprite.__init__(self)
 
@@ -25,6 +25,7 @@ class DiffRobot(IRobot, sprite.Sprite):
             raise ValueError("Wheel base is not positive")
 
         self.lidar = lidar
+        self.collider = collider
         self.x = startX
         self.y = startY
         self.posePublisher = posePublisher
@@ -47,6 +48,8 @@ class DiffRobot(IRobot, sprite.Sprite):
         self.Move()
         self.lidar.SetPosition(self.x, self.y)
         self.lidar.Scan(screen)
+        if self.collider.check_collision_robot(self):
+            self.stop()
 
     def CmdVelCallback(self, msg: Twist) -> None:
         if msg is None:
@@ -72,6 +75,10 @@ class DiffRobot(IRobot, sprite.Sprite):
         self.rect = self.image.get_rect(center=(self.x, self.y))
         self.rect.center = (self.x, self.y)
         self.lidar.SetPosition(self.x, self.y)
+
+    def stop(self) -> None:
+        self.vel_l = 0.0
+        self.vel_r = 0.0
 
     def euler_to_quaternion(self, yaw):
         qx = 0.0
