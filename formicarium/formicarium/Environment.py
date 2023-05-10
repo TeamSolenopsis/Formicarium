@@ -1,7 +1,5 @@
 from formicarium.Interfaces import IEnvironment, ICollider, IRobot
 import pygame
-from pygame import sprite
-from geometry_msgs.msg import Twist
 
 class Environment(IEnvironment, ICollider):
     def __init__(self, width: float, height: float) -> None:
@@ -46,7 +44,7 @@ class Environment(IEnvironment, ICollider):
 
         return False
     
-    def check_collision_robot(self, robot:sprite.Sprite) -> bool:
+    def check_collision_robot(self, robot:pygame.prite.Sprite) -> bool:
         _robot_group = self.robot_group.copy()
         _robot_group.remove(robot)
         for _robot in _robot_group:
