@@ -20,19 +20,33 @@ class Lidar(ILidar):
         self.white = Color(255, 255, 255)
         self.red = Color(255, 0, 0)
         self.m2p = 3779.5275590551
+        self.range_min = 18
+        self.number_of_points = 240
 
     def scan(self, map: Surface, stamp:Time) -> LaserScan:
         if map is None:
             raise ValueError("map cannot be None")
 
-        data = []
+        msg = LaserScan()
+        msg.header.stamp = stamp
+        msg.header.frame_id = "laser"
+        msg.angle_min = float(0)
+        msg.angle_max = float(2*math.pi)
+        msg.angle_increment = float(2*math.pi / self.number_of_points)
+        msg.time_increment = float(0)
+        msg.scan_time = float(0)
+        msg.range_min = self.range_min / self.m2p
+        msg.range_max = float(self.range)
+        msg.ranges = []
+        msg.intensities = []
+
         x_0, y_0 = self.position[0], self.position[1]
-        for angle in np.linspace(0, 2*math.pi, 60, False):
+        for angle in np.linspace(0, 2*math.pi, self.number_of_points, False):
             # get distance at current angle
             x_i, y_i = (x_0 + self.range * math.cos(angle)), (y_0 - self.range * math.sin(angle))
 
             # find endpoint
-            for i in range(18, 100):
+            for i in range(self.range_min, 100):
                 j = i / 100
                 x_t = int(x_i * j + x_0 * (1 - j))
                 y_t = int(y_i * j + y_0 * (1 - j))
@@ -40,27 +54,14 @@ class Lidar(ILidar):
                     continue
 
                 if self.collider.check_collision_lidar(x_t, y_t):
-                    data.append((x_t, y_t))
+                    msg.ranges.append(math.sqrt((x_t - x_0)**2 + (y_t - y_0)**2)/self.m2p)
                     break
+
 
             if (i != 99):
                 draw.line(map, self.red, (x_0, y_0), (x_t, y_t))
-     
-        msg = LaserScan()
-        msg.header.stamp = stamp
-        msg.header.frame_id = "laser"
-        msg.angle_min = float(0)
-        msg.angle_max = float(2*math.pi)
-        msg.angle_increment = float(2*math.pi / 60)
-        msg.time_increment = float(0)
-        msg.scan_time = float(0)
-        msg.range_min = float(0)
-        msg.range_max = float(self.range)
-        msg.ranges = []
-        msg.intensities = []
-        for point in data:
-            msg.ranges.append(math.sqrt((point[0] - x_0)**2 + (point[1] - y_0)**2)/self.m2p)
-            msg.intensities.append(0)
+            else:
+                msg.ranges.append(float('inf'))
 
         return msg
 
