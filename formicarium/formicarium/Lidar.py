@@ -17,6 +17,7 @@ class Lidar(ILidar):
         self.position = (xPos, yPos)
         self.white = Color(255, 255, 255)
         self.red = Color(255, 0, 0)
+        self.m2p = 3779.5275590551
 
     def scan(self, map: Surface, node:Node) -> LaserScan:
         if map is None:
@@ -56,7 +57,7 @@ class Lidar(ILidar):
         msg.ranges = []
         msg.intensities = []
         for point in data:
-            msg.ranges.append(math.sqrt((point[0] - x_0)**2 + (point[1] - y_0)**2))
+            msg.ranges.append(math.sqrt((point[0] - x_0)**2 + (point[1] - y_0)**2)/self.m2p)
             msg.intensities.append(0)
 
         return msg
