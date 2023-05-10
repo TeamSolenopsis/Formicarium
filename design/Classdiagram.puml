@@ -4,41 +4,42 @@ class Formicarium{
 }
 
 interface IEnvironment{
-    +Update()
+    +update()
+    +add_robot(robot:IRobot)
+    +add_obstacle(pose_dim:(float,float,float,float))
+    +get_robot_names() -> list
 }
 
 interface ICollider{
-    +CheckCollision()
+    +check_collision_lidar(x: float, y: float) -> bool
+    +check_collision_robot(x: float, y: float) -> bool
 }
 
 class Environment{
     +Environment(width: float, height: float)
 }
 
-interface IPublisher{
-    +Publish(self, data)
-}
-
 interface IRobot{
-    +Draw()
-    +PublishOdometry()
-    +PublishPose()
-    +CmdVelCallback()
-    +Move()
+    +update(map:Surface)
+    +cmd_vel_callback(msg:Twist)
+    +move()
+    +stop()
+    +publish_odom()
+    +publish_pose()
 }
 
 class DiffRobot{
-    +DiffRobot(wheelRadius: float, wheelBase: float, startX: float, startY: float,
-                 odomPublisher: IPublisher, posePublisher: IPublisher, lidar: ILidar, img: image)
+    +DiffRobot(name:str, wheel_radius: float, wheel_base: float, start_x: float, start_y: float,
+                 lidar: ILidar, img: image, collider:ICollider, node:Node)
 }
 
 interface ILidar{
-    +Scan(map: Surface)
-    +SetPosition(x: float, y: float)
+    +scan(map:Surface,stamp:Time)
+    +set_position(x: float, y: float)
 }
 
 class Lidar{
-    +Lidar(collider:ICollider, range: float, xPos: float, yPos: float, scanPub: IPublisher)
+    +Lidar( collider:ICollider, range: float, xPos: float, yPos: float)
 }
 
 IEnvironment <|-- Environment
@@ -53,5 +54,7 @@ IRobot <|-right- DiffRobot
 ILidar <|-- Lidar
 DiffRobot o-- ILidar
 Lidar o-left- ICollider
+
+Formicarium *-- DiffRobot
 
 @enduml
