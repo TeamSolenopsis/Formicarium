@@ -79,7 +79,9 @@ class DiffRobot(IRobot, sprite.Sprite):
     def stop(self) -> None:
         self.vel_l = 0.0
         self.vel_r = 0.0
-
+        self.linear.x = 0.0
+        self.angular.z = 0.0
+        
     def euler_to_quaternion(self, yaw):
         qx = 0.0
         qy = 0.0
