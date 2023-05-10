@@ -44,7 +44,7 @@ class Environment(IEnvironment, ICollider):
 
         return False
     
-    def check_collision_robot(self, robot:pygame.prite.Sprite) -> bool:
+    def check_collision_robot(self, robot:pygame.sprite.Sprite) -> bool:
         _robot_group = self.robot_group.copy()
         _robot_group.remove(robot)
         for _robot in _robot_group:
