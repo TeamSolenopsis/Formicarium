@@ -49,7 +49,7 @@ class IEnvironment(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def add_obstacle(self, obstacle) -> None:
+    def add_obstacle(self, pose_dim) -> None:
         pass
 
     def get_robot_names(self) -> list:
