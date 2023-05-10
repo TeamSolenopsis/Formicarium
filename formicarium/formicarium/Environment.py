@@ -31,8 +31,8 @@ class Environment(IEnvironment, ICollider):
         self.robot_names.append(robot.name)
         self.robot_group.add(robot)
     
-    def add_obstacle(self, dim_pos) -> None:
-        _obstacle = pygame.Rect(dim_pos)
+    def add_obstacle(self, pos_dim) -> None:
+        _obstacle = pygame.Rect(pos_dim)
         self.obstacle_group.append(_obstacle)
 
     def check_collision_lidar(self, x: float, y: float) -> bool:
