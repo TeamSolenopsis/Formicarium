@@ -48,10 +48,7 @@ class Formicarium(Node):
 
     def validate_spawn_pose(self, x:float, y:float):
         return RobotConfig.Width / 2 < x and x < (self.environment_width - (RobotConfig.Width / 2)) and RobotConfig.Height / 2 < y and y < (self.environment_height - (RobotConfig.Height / 2))
-    
-    def validate_spawn_obstacle_pose(self, x, y, width, height):
-        return (x + width) < self.environment_width and (y + height) < self.environment_height and x > 0 and y > 0
-    
+   
 def main(args=None):
     rclpy.init(args=args)
 
