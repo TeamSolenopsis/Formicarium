@@ -3,6 +3,8 @@ from pygame import Surface
 from geometry_msgs.msg import Twist
 from nav_msgs.msg import Odometry
 from pygame import sprite
+from rclpy.node import Node
+from builtin_interfaces.msg import Time
 
 class IRobot(abc.ABC):
     @abc.abstractmethod
@@ -31,7 +33,7 @@ class IRobot(abc.ABC):
 
 class ILidar(abc.ABC):
     @abc.abstractmethod
-    def scan(self, map: Surface) -> None:
+    def scan(self, map: Surface, stamp:Time) -> None:
         pass
 
     @abc.abstractmethod
