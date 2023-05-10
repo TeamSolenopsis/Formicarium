@@ -7,7 +7,6 @@ from geometry_msgs.msg import Twist
 from sensor_msgs.msg import LaserScan
 from rclpy.node import Node
 
-
 class DiffRobot(IRobot, sprite.Sprite):
     def __init__(self,name:str, wheel_radius: float, wheel_base: float, start_x: float, start_y: float,
                  lidar: ILidar, img: image, collider:ICollider, node:Node) -> None:
@@ -108,6 +107,7 @@ class DiffRobot(IRobot, sprite.Sprite):
         odom = Odometry()
         odom.header.frame_id = "odom"
         odom.child_frame_id = "base_link"
+        odom.header.stamp = self.node.get_clock().now().to_msg()
         odom.pose.pose.position.x = float(self.x) / self.m2p
         odom.pose.pose.position.y = float(self.y) / self.m2p
         odom.pose.pose.position.z = 0.0
