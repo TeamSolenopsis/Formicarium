@@ -43,7 +43,7 @@ class Lidar(ILidar):
 
             if (i != 99):
                 draw.line(map, self.red, (x_0, y_0), (x_t, y_t))
-
+                ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
         msg = LaserScan()
         msg.header.stamp = node.get_clock().now().to_msg()
         msg.header.frame_id = "laser"
@@ -61,6 +61,7 @@ class Lidar(ILidar):
             msg.intensities.append(0)
 
         return msg
+
 
     def set_position(self, x: float, y: float) -> tuple[float, float]:
         self.position = (x, y)
