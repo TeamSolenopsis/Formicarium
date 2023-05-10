@@ -1,7 +1,5 @@
 from formicarium.Interfaces import IEnvironment, ICollider, IRobot
 import pygame
-from pygame import sprite
-from geometry_msgs.msg import Twist
 
 class Environment(IEnvironment, ICollider):
     def __init__(self, width: float, height: float) -> None:
@@ -31,14 +29,14 @@ class Environment(IEnvironment, ICollider):
         self.robot_names.append(robot.name)
         self.robot_group.add(robot)
     
-    def add_obstacle(self, dim_pos) -> None:
-        _obstacle = pygame.Rect(dim_pos)
+    def add_obstacle(self, pos_dim) -> None:
+        _obstacle = pygame.Rect(pos_dim)
         self.obstacle_group.append(_obstacle)
 
     def check_collision_lidar(self, x: float, y: float) -> bool:
         #check collision with sprite
         for robot in self.robot_group:
-            if robot.rect.collidepoint(x, y):
+            if robot.hitbox.collidepoint(x, y):
                 return True
             
         if self.screen.get_at((x,y)) != self.color_background and self.screen.get_at((x,y)) != self.color_laser:
@@ -46,15 +44,17 @@ class Environment(IEnvironment, ICollider):
 
         return False
     
-    def check_collision_robot(self, robot:sprite.Sprite) -> bool:
+    def check_collision_robot(self, robot:pygame.sprite.Sprite) -> bool:
         _robot_group = self.robot_group.copy()
         _robot_group.remove(robot)
-        if pygame.sprite.spritecollideany(robot, _robot_group or []):
-            return True
+        for _robot in _robot_group:
+            if pygame.Rect.colliderect(robot.hitbox, _robot.hitbox):
+                return True
+            
+        for _obstacle in self.obstacle_group:
+            if pygame.Rect.colliderect(robot.hitbox, _obstacle):
+                return True
         
-        if robot.rect.collidelist(self.obstacle_group) != -1:
-            return True
-    
         return False
     
     def get_robot_names(self) -> list:

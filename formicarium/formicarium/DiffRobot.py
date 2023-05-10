@@ -6,6 +6,7 @@ from math import sin, cos, pi, degrees
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import LaserScan
 from rclpy.node import Node
+from pygame import Rect
 
 class DiffRobot(IRobot, sprite.Sprite):
     def __init__(self,name:str, wheel_radius: float, wheel_base: float, start_x: float, start_y: float,
@@ -43,6 +44,8 @@ class DiffRobot(IRobot, sprite.Sprite):
         self.wheel_base = wheel_base
         self.wheel_radius = wheel_radius
         self.rect = self.image.get_rect(center=(self.x, self.y))
+        self.hitbox = Rect(0, 0, 69.5, 69.5)
+        self.hitbox.center = self.rect.center
         self.previous_time = time.get_ticks()
         self.vel_l = 0
         self.vel_r = 0
@@ -85,6 +88,7 @@ class DiffRobot(IRobot, sprite.Sprite):
         self.image = transform.rotate(self.robot_original, degrees(self.theta) % 360)
         self.rect = self.image.get_rect(center=(self.x, self.y))
         self.rect.center = (self.x, self.y)
+        self.hitbox.center = (self.x, self.y)
         self.lidar.set_position(self.x, self.y)
 
         self.publish_odom()    
@@ -119,8 +123,8 @@ class DiffRobot(IRobot, sprite.Sprite):
 
     def publish_pose(self) -> None:
         pose = Pose()
-        pose.position.x = float(self.x)
-        pose.position.y = float(self.y) 
+        pose.position.x = float(self.x) / self.m2p
+        pose.position.y = float(self.y)  / self.m2p
         pose.position.z = 0.0
         pose.orientation = self.euler_to_quaternion(self.theta * pi / 2)
 
