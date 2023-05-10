@@ -6,7 +6,7 @@ from math import sin, cos, pi, degrees
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import LaserScan
 from rclpy.node import Node
-import pygame
+from pygame import Rect
 
 class DiffRobot(IRobot, sprite.Sprite):
     def __init__(self,name:str, wheel_radius: float, wheel_base: float, start_x: float, start_y: float,
@@ -44,7 +44,7 @@ class DiffRobot(IRobot, sprite.Sprite):
         self.wheel_base = wheel_base
         self.wheel_radius = wheel_radius
         self.rect = self.image.get_rect(center=(self.x, self.y))
-        self.hitbox = pygame.Rect(0, 0, 69.5, 69.5)
+        self.hitbox = Rect(0, 0, 69.5, 69.5)
         self.hitbox.center = self.rect.center
         self.previous_time = time.get_ticks()
         self.vel_l = 0
