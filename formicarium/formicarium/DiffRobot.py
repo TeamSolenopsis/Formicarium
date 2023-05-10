@@ -59,7 +59,7 @@ class DiffRobot(IRobot, sprite.Sprite):
     def update(self, screen:Surface) -> None:
         self.move()
         self.lidar.set_position(self.x, self.y)
-        self.lidar_publisher.publish(self.lidar.scan(screen, self.node))
+        self.lidar_publisher.publish(self.lidar.scan(screen, self.node.get_clock().now().to_msg()))
         if self.collider.check_collision_robot(self):
             self.stop()
 
