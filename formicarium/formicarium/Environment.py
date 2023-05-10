@@ -38,7 +38,7 @@ class Environment(IEnvironment, ICollider):
     def check_collision_lidar(self, x: float, y: float) -> bool:
         #check collision with sprite
         for robot in self.robot_group:
-            if robot.rect.collidepoint(x, y):
+            if robot.hitbox.collidepoint(x, y):
                 return True
             
         if self.screen.get_at((x,y)) != self.color_background and self.screen.get_at((x,y)) != self.color_laser:
@@ -49,12 +49,14 @@ class Environment(IEnvironment, ICollider):
     def check_collision_robot(self, robot:sprite.Sprite) -> bool:
         _robot_group = self.robot_group.copy()
         _robot_group.remove(robot)
-        if pygame.sprite.spritecollideany(robot, _robot_group or []):
-            return True
+        for _robot in _robot_group:
+            if pygame.Rect.colliderect(robot.hitbox, _robot.hitbox):
+                return True
+            
+        for _obstacle in self.obstacle_group:
+            if pygame.Rect.colliderect(robot.hitbox, _obstacle):
+                return True
         
-        if robot.rect.collidelist(self.obstacle_group) != -1:
-            return True
-    
         return False
     
     def get_robot_names(self) -> list:

@@ -20,7 +20,7 @@ class Lidar(ILidar):
         self.white = Color(255, 255, 255)
         self.red = Color(255, 0, 0)
         self.m2p = 3779.5275590551
-        self.range_min = 18
+        self.range_min = 10
         self.number_of_points = 240
 
     def scan(self, map: Surface, stamp:Time) -> LaserScan:
