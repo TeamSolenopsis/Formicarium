@@ -10,6 +10,11 @@ class Environment(IEnvironment, ICollider):
         self.screen = pygame.display.set_mode((self.width, self.height))
         self.robot_group = pygame.sprite.Group()
         self.obstacle_group = []
+        self.borders = [pygame.Rect(0, 0, 20, self.height),
+                        pygame.Rect(0, 0, self.width, 20),
+                        pygame.Rect(self.width - 20, 0, 20, self.height),
+                        pygame.Rect(0, self.height - 20, self.width, 20)]
+        self.obstacle_group.extend(self.borders)
         self.color_background = pygame.color.Color(139, 69, 19, 255)
         self.color_laser = pygame.color.Color(255, 0, 0, 255)
         self.robot_names = []
@@ -21,7 +26,6 @@ class Environment(IEnvironment, ICollider):
         pygame.display.update()
         
         self.screen.fill(self.color_background)
-        pygame.draw.rect(self.screen, (0, 0, 255), pygame.Rect(0, 0, self.width, self.height), width=20)
         for obstacle in self.obstacle_group:
             pygame.draw.rect(self.screen, (0,0,255), obstacle, width=20)
         
