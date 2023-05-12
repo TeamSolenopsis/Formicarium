@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+   
+    <joint name="laser_joint" type="fixed">
+        <parent link="chassis"/>
+        <child link="laser_frame"/>
+        <origin xyz="0 0 0.005"/>
+    </joint>
+
+    <material name="red">
+        <color rgba="1 0 0 1"/>
+    </material>
+
+    <link name="laser_frame">
+        <visual>
+            <origin xyz="0 0 0"/>
+            <geometry>
+                <cylinder radius="0.0013229167" length="0.0025"/>
+            </geometry>
+            <material name="red"/>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0"/>
+            <geometry>
+                <cylinder radius="0.0013229167" length="0.0025"/>
+            </geometry>
+            <material name="red"/>
+        </collision>
+        <xacro:inertial_cylinder mass="0.1" length="0.0025" radius="5">
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </xacro:inertial_cylinder>/
+    </link>
+</robot>

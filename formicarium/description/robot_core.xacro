@@ -1,7 +1,20 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="robot">
     
-    <xacro:include filename="material.xacro"/>
+    <xacro:include filename="inertial_macros.xacro"/>
+
+    <material name="white">
+        <color rgba="1 1 1 1"/>
+    </material>
+
+    <material name="black">
+        <color rgba="0 0 0 1"/>
+    </material>
+
+    <material name="green">
+        <color rgba="0 1 0 1"/>
+    </material>
+
 
     <!-- BASE Link -->
 
@@ -14,17 +27,27 @@
     <joint name="chassis_joint" type="fixed">
         <parent link="base_link"/>
         <child link="chassis"/>
-        <origin xyz="-0.1 0 0"/>
+        <origin xyz="-0.001 0 0"/>
     </joint>
 
     <link name="chassis">
         <visual>
             <origin xyz="0.0 0 0"/>
             <geometry>
-                <cylinder radius="50" length="0.01"/>
+                <cylinder radius="0.0132291667" length="0.01"/>
             </geometry>
             <material name="white"/>
         </visual>
+        <collision>
+            <origin xyz="0.0 0 0"/>
+            <geometry>
+                <cylinder radius="0.0132291667" length="0.01"/>
+            </geometry>
+            <material name="white"/>
+        </collision>
+        <xacro:inertial_cylinder mass="0.1" length="0.01" radius="0.0132291667">
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </xacro:inertial_cylinder>/
     </link>
 
     <!-- WHEELS Link
@@ -61,22 +84,29 @@
         </visual>
     </link> -->
 
-    <!-- Lidar Link -->
-    
-    <joint name="lidar_joint" type="fixed">
-        <parent link="base_link"/>
-        <child link="lidar"/>
-        <origin xyz="0 0 0.01"/>
+    <!-- Front Indicator Link -->
+    <joint name="front_indicator_joint" type="fixed">
+        <parent link="chassis"/>
+        <child link="front_indicator"/>
+        <origin xyz="0.0082916667 0 0.005"/>
     </joint>
 
-    <link name="lidar">
+    <link name="front_indicator">
         <visual>
-            <origin xyz="0 0 0.01"/>
+            <origin xyz=" 0 0 0"/>
             <geometry>
-                <cylinder radius="5" length="0.1"/>
+                <cylinder radius="0.0013229167" length="0.0025"/>
             </geometry>
-            <material name="red"/>
         </visual>
+          <collision>
+            <origin xyz=" 0 0 0"/>
+            <geometry>
+                <cylinder radius="0.0013229167" length="0.0025"/>
+            </geometry>
+            <material name="green"/>
+          </collision>
+        <xacro:inertial_cylinder mass="0.1" length="0.0025" radius="0.0013229167">
+            <origin xyz=" 0 0 0" rpy="0 0 0"/>
+        </xacro:inertial_cylinder>/
     </link>
-
 </robot>

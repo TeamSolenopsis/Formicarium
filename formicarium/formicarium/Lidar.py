@@ -29,7 +29,7 @@ class Lidar(ILidar):
 
         msg = LaserScan()
         msg.header.stamp = stamp
-        msg.header.frame_id = "laser"
+        msg.header.frame_id = "laser_frame"
         msg.angle_min = float(0)
         msg.angle_max = float(2*math.pi)
         msg.angle_increment = float(2*math.pi / self.number_of_points)
