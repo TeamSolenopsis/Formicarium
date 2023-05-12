@@ -1,6 +1,6 @@
 from formicarium.Interfaces import ILidar, IRobot, ICollider
 from pygame import Surface, transform, image, time, sprite
-from geometry_msgs.msg import Pose, Quaternion, Vector3
+from geometry_msgs.msg import Pose, Pose2D, Quaternion, Vector3
 from nav_msgs.msg import Odometry
 from math import sin, cos, pi, degrees
 from geometry_msgs.msg import Twist
@@ -35,7 +35,7 @@ class DiffRobot(IRobot, sprite.Sprite):
         self.x = start_x
         self.y = start_y
         self.node = node
-        self.theta = 0
+        self.theta_rad = 0
         self.m2p = 3779.5275590551
         self.image = img
         self.image = transform.scale(self.image, (80, 81))
@@ -53,7 +53,7 @@ class DiffRobot(IRobot, sprite.Sprite):
         self.angular = Vector3()
 
         self.odom_publisher = self.node.create_publisher(Odometry, f'{self.name}/odom', 10)
-        self.pose_publisher = self.node.create_publisher(Pose, f'{self.name}/pose', 10)
+        self.pose_publisher = self.node.create_publisher(Pose2D, f'{self.name}/pose', 10)
         self.lidar_publisher = self.node.create_publisher(LaserScan, f'{self.name}/scan', 10)
 
         self.cmd_vel_sub = self.node.create_subscription(Twist, f'{self.name}/cmd_vel', self.cmd_vel_callback,10)
@@ -82,10 +82,10 @@ class DiffRobot(IRobot, sprite.Sprite):
         delta_time = (time.get_ticks() - self.previous_time) / 1000
         self.previous_time = time.get_ticks()
 
-        self.theta += (self.vel_r - self.vel_l) / self.wheel_base * delta_time
-        self.x += ((self.vel_l + self.vel_r) / 2) * cos(self.theta) * delta_time
-        self.y -= ((self.vel_l + self.vel_r) / 2) * sin(self.theta) * delta_time  
-        self.image = transform.rotate(self.robot_original, degrees(self.theta) % 360)
+        self.theta_rad += (self.vel_r - self.vel_l) / self.wheel_base * delta_time
+        self.x += ((self.vel_l + self.vel_r) / 2) * cos(self.theta_rad) * delta_time
+        self.y -= ((self.vel_l + self.vel_r) / 2) * sin(self.theta_rad) * delta_time  
+        self.image = transform.rotate(self.robot_original, degrees(self.theta_rad) % 360)
         self.rect = self.image.get_rect(center=(self.x, self.y))
         self.rect.center = (self.x, self.y)
         self.hitbox.center = (self.x, self.y)
@@ -115,17 +115,16 @@ class DiffRobot(IRobot, sprite.Sprite):
         odom.pose.pose.position.x = float(self.x) / self.m2p
         odom.pose.pose.position.y = float(self.y) / self.m2p
         odom.pose.pose.position.z = 0.0
-        odom.pose.pose.orientation = self.euler_to_quaternion(self.theta * pi / 2)
+        odom.pose.pose.orientation = self.euler_to_quaternion(self.theta_rad * pi / 2)
         odom.twist.twist.linear = self.linear
         odom.twist.twist.angular = self.angular
 
         self.odom_publisher.publish(odom)
 
     def publish_pose(self) -> None:
-        pose = Pose()
-        pose.position.x = float(self.x) / self.m2p
-        pose.position.y = float(self.y)  / self.m2p
-        pose.position.z = 0.0
-        pose.orientation = self.euler_to_quaternion(self.theta * pi / 2)
+        pose = Pose2D()
+        pose.x = float(self.x) / self.m2p
+        pose.y = float(self.y)  / self.m2p
+        pose.theta = self.theta_rad
 
         self.pose_publisher.publish(pose)
